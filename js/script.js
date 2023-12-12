@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const API_URL = 'YOUR_API_ENDPOINT';
   
     // Fetch movies from the API
-    fetch(`${API_URL}/movies`)
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY`)
       .then(response => response.json())
       .then(data => {
         data.forEach(movie => {
