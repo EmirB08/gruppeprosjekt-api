@@ -1,4 +1,4 @@
-const apiUrl = "https://api.tvmaze.com/shows";
+const apiUrl = "https://api.tvmaze.com/people";
 
 const getItems = async (url) => { //async function to get the items from the API
     const response = await fetch(url);
@@ -46,9 +46,6 @@ const createItemCard = (item) => { //function to create a card for the given ite
         rating.className = "item-rating";
         card.appendChild(rating);
     }
-
-    // Additional checks can be added here for other types of data
-
     return card;
 };
 
