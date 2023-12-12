@@ -1,36 +1,34 @@
-
 document.addEventListener('DOMContentLoaded', function () {
-    const moviesContainer = document.getElementById('movies-container');
-  
-    // Replace with your API endpoint
-    const API_URL = 'YOUR_API_ENDPOINT';
-  
-    // Fetch movies from the API
-    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(movie => {
-          const movieElement = createMovieElement(movie);
-          moviesContainer.appendChild(movieElement);
-        });
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  
-    function createMovieElement(movie) {
-      const movieDiv = document.createElement('div');
-      movieDiv.classList.add('movie');
-  
-      const img = document.createElement('img');
-      img.src = movie.poster;
-      img.alt = movie.title;
-  
-      const title = document.createElement('h2');
-      title.textContent = movie.title;
-  
-      movieDiv.appendChild(img);
-      movieDiv.appendChild(title);
-  
-      return movieDiv;
+    const seriesContainer = document.getElementById('series-container');
+
+    // Replace with your TVmaze API endpoint
+    const API_URL = 'https://api.tvmaze.com/shows';
+
+    // Fetch TV series from the TVmaze API
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(series => {
+                const seriesElement = createSeriesElement(series);
+                seriesContainer.appendChild(seriesElement);
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+    function createSeriesElement(series) {
+        const seriesDiv = document.createElement('div');
+        seriesDiv.classList.add('series');
+
+        const img = document.createElement('img');
+        img.src = series.image.medium; // Assuming the image information is available in the medium size
+        img.alt = series.name;
+
+        const title = document.createElement('h2');
+        title.textContent = series.name;
+
+        seriesDiv.appendChild(img);
+        seriesDiv.appendChild(title);
+
+        return seriesDiv;
     }
-  });
-  
+});
