@@ -1,4 +1,4 @@
-const apiUrl = "https://api.tvmaze.com/people";
+const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
 
 const getItems = async (url) => { //async function to get the items from the API
     const response = await fetch(url);
@@ -16,14 +16,14 @@ const displayItems = (items) => { //function to display the items
     });
 };
 
-const createContainer = (id) => { //function to create a container with the given id, just using this as fallback for "item-container" for now
+const createContainer = (id) => { //function to create a container with the given id
     const container = document.createElement("div");
     container.id = id;
     document.body.appendChild(container);
     return container;
 };
 
-const createItemCard = (item) => { //function to create a card for the given item
+const createItemCard = (item) => { //function to create a card for the given item, reusable for other types of items
     const card = document.createElement("div");
     card.className = "item-card";
 
