@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(API_URL)
         .then(response => response.json())
         .then(data => {
+            // Sort the series alphabetically by name
+            data.sort((a, b) => a.name.localeCompare(b.name));
             data.forEach(series => {
                 const seriesElement = createSeriesElement(series);
                 seriesContainer.appendChild(seriesElement);
