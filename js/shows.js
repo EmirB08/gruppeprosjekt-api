@@ -1,4 +1,4 @@
-const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
+const apiUrl = "https://www.tvmaze.com/shows"; 
 
 const getItems = async (url) => { //async function to get the items from the API
     const response = await fetch(url);
