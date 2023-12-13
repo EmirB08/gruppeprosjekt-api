@@ -1,4 +1,4 @@
-// shows.js
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const apiUrlBase = 'https://api.tvmaze.com/shows';
