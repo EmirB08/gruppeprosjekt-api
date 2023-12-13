@@ -1,5 +1,5 @@
 
-import { fetchShows, displayShows, displayPagination, createShowCard } from './shows.js';
+
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
 
 const getItems = async (url) => { //async function to get the items from the API
@@ -9,7 +9,7 @@ const getItems = async (url) => { //async function to get the items from the API
 };
 
 const displayItems = (items) => { //function to display the items
-    const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
+    const container = document.getElementById("items-contaner") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
     container.innerHTML = "";
 
     items.forEach(item => {
