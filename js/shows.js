@@ -1,52 +1,115 @@
-const apiUrl = " https://api.tvmaze.com/shows/1"; 
+// shows.js
 
-const getItems = async (url) => { //async function to get the items from the API
-    const response = await fetch(url);
-    const items = await response.json();
-    displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
-};
+document.addEventListener('DOMContentLoaded', function () {
+    const apiUrlBase = 'https://api.tvmaze.com/shows';
+    const pageSize = 10;
+    let currentPage = 1;
 
-const displayItems = (items) => { //function to display the items
-    const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
-    container.innerHTML = "";
+    // DOM Elements
+    const searchInput = document.querySelector('#search-input');
+    const searchButton = document.querySelector('#search-button');
+    const showsContainer = document.querySelector('#shows-container');
+    const paginationContainer = document.querySelector('#pagination-container');
 
-    items.forEach(item => {
-        const card = createItemCard(item);
-        container.appendChild(card);
+    // Fetch TV Shows data when the page loads
+    fetchAndDisplayShows(apiUrlBase, currentPage);
+
+    // Event listener for the search button
+    searchButton.addEventListener('click', function () {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm !== '') {
+            currentPage = 1;
+            const apiUrlSearch = `${apiUrlBase}/search/shows?q=${searchTerm}`;
+            fetchAndDisplayShows(apiUrlSearch, currentPage);
+        }
     });
-};
 
-const createContainer = (id) => { //function to create a container with the given id
-    const container = document.createElement("div");
-    container.id = id;
-    document.body.appendChild(container);
-    return container;
-};
+    // Function to fetch and display TV Shows
+    const fetchAndDisplayShows = async (url, page) => {
+        try {
+            const shows = await fetchShows(url, page);
+            displayShows(shows);
+            displayPagination(page, Math.ceil(shows.length / pageSize), url);
+        } catch (error) {
+            console.error('Error fetching and displaying shows:', error);
+        }
+    };
 
-const createItemCard = (item) => { //function to create a card for the given item, reusable for other types of items
-    const card = document.createElement("div");
-    card.className = "item-card";
+    // Function to fetch TV Shows from the API
+    const fetchShows = async (url, page) => {
+        const response = await fetch(`${url}?page=${page}&pageSize=${pageSize}`);
+        return await response.json();
+    };
 
-    const image = document.createElement("img"); // Create an image element
-    image.src = item.image ? item.image.medium : "placeholder.jpg";
-    image.alt = item.name || item.title || "Image";
-    image.className = "item-image";
-    card.appendChild(image);
+    // Function to display TV Shows
+    const displayShows = (shows) => {
+        showsContainer.innerHTML = '';
 
-    if (item.name || item.title) { // If the item has a name or title, create a title element
-        const title = document.createElement("h4");
-        title.textContent = item.name || item.title;
-        title.className = "item-title";
+        shows.forEach(show => {
+            const card = createShowCard(show);
+            showsContainer.appendChild(card);
+        });
+    };
+
+    // Function to display pagination buttons
+    const displayPagination = (currentPage, totalPages, apiUrl) => {
+        paginationContainer.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = createPageButton(i, apiUrl);
+            paginationContainer.appendChild(pageButton);
+        }
+    };
+
+    // Function to create a pagination button
+    const createPageButton = (pageNumber, apiUrl) => {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = pageNumber;
+        pageButton.addEventListener('click', function () {
+            currentPage = pageNumber;
+            fetchAndDisplayShows(apiUrl, currentPage);
+        });
+        return pageButton;
+    };
+
+    // Function to create a card for a TV Show
+    const createShowCard = (show) => {
+        const card = document.createElement('div');
+        card.className = 'show-card';
+
+        const image = createImage(show);
+        const title = createTitle(show);
+        const rating = createRating(show);
+
+        card.appendChild(image);
         card.appendChild(title);
-    }
-
-    if (item.rating && item.rating.average) { // If the item has a rating, create a rating element
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        rating.className = "item-rating";
         card.appendChild(rating);
-    }
-    return card;
-};
 
-getItems(apiUrl);
+        return card;
+    };
+
+    // Function to create an image element for a TV Show
+    const createImage = (show) => {
+        const image = document.createElement('img');
+        image.src = show.image ? show.image.medium : 'placeholder.jpg';
+        image.alt = show.name || 'Image';
+        image.className = 'show-image';
+        return image;
+    };
+
+    // Function to create a title element for a TV Show
+    const createTitle = (show) => {
+        const title = document.createElement('h4');
+        title.textContent = show.name || 'Untitled';
+        title.className = 'show-title';
+        return title;
+    };
+
+    // Function to create a rating element for a TV Show
+    const createRating = (show) => {
+        const rating = document.createElement('p');
+        rating.textContent = show.rating && show.rating.average ? `Rating: ${show.rating.average}` : 'Rating: N/A';
+        rating.className = 'show-rating';
+        return rating;
+    };
+});
