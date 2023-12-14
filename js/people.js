@@ -64,7 +64,6 @@ const searchInput = document.querySelector("[data-search]");
 searchInput.addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();
 
-  // Corrected: Using filter instead of fill, and fixing variable names
   const filteredItems = allItems.filter((item) => {
     return (
       item.name.toLowerCase().includes(value) ||
