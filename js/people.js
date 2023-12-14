@@ -1,9 +1,10 @@
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
-
+let allItems = [];
 const getItems = async (url) => {
   //async function to get the items from the API
   const response = await fetch(url);
   const items = await response.json();
+  allItems = items;
   displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
@@ -56,5 +57,24 @@ const createItemCard = (item) => {
   }
   return card;
 };
+/* ------------
+!!! Search !!!
+------------- */
+const searchInput = document.querySelector("[data-search]");
+searchInput.addEventListener("input", (e) => {
+  const value = e.target.value.toLowerCase();
+
+  // Corrected: Using filter instead of fill, and fixing variable names
+  const filteredItems = allItems.filter((item) => {
+    return (
+      item.name.toLowerCase().includes(value) ||
+      (item.rating &&
+        item.rating.average &&
+        item.rating.average.toString().includes(value))
+    );
+  });
+
+  displayItems(filteredItems);
+});
 
 getItems(apiUrl);
