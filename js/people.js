@@ -1,10 +1,8 @@
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
-let allItems = [];
 const getItems = async (url) => {
   //async function to get the items from the API
   const response = await fetch(url);
   const items = await response.json();
-  allItems = items;
   displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
@@ -60,19 +58,24 @@ const createItemCard = (item) => {
 /* ------------
 !!! Search !!!
 ------------- */
+// Function to perform the search
+const performSearch = async (query) => {
+  const response = await fetch(
+    `https://api.tvmaze.com/search/people?q=${query}`
+  );
+  const searchResults = await response.json();
+  displayItems(searchResults.map((result) => result.show));
+};
+// Event listener for the search input
 const searchInput = document.querySelector("[data-search]");
 searchInput.addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();
-  const filteredItems = allItems.filter((item) => {
-    return (
-      item.name.toLowerCase().includes(value) ||
-      (item.rating &&
-        item.rating.average &&
-        item.rating.average.toString().includes(value))
-    );
-  });
-
-  displayItems(filteredItems);
+  performSearch(value);
 });
-
+// Event listener for the search button
+const searchButton = document.getElementById("Search");
+searchButton.addEventListener("click", () => {
+  const searchValue = searchInput.value.toLowerCase();
+  performSearch(searchValue);
+});
 getItems(apiUrl);
