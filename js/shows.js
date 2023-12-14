@@ -1,4 +1,10 @@
 const apiUrl = "https://api.tvmaze.com/shows";// Im just using the people API, you replace this with whatever you are working on
+// Function to search for shows based on user input
+const searchShows = async () => {
+  const searchInput = document.getElementById("search-input").value;
+  const searchUrl = `${apiUrl}/search/shows?q=${searchInput}`;
+  getItems(searchUrl);
+};
 const getItems = async (url) => {
     const response = await fetch(url);
     const shows = await response.json(); // Rename 'items' to 'shows' for clarity
