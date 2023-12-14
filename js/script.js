@@ -1,9 +1,10 @@
-const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
+const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
 
 const getItems = async (url) => { //async function to get the items from the API
     const response = await fetch(url);
     const items = await response.json();
-    displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
+    console.log(items);
+    displayItems(items); //calling the displayItems function to display the items
 };
 
 const displayItems = (items) => { //function to display the items
@@ -48,5 +49,34 @@ const createItemCard = (item) => { //function to create a card for the given ite
     }
     return card;
 };
+
+const createSearchElements = () => {
+    const searchContainer = document.createElement("div");
+    searchContainer.className = "search-container"; // just giving everything a class name for css
+
+    const searchInput = document.createElement("input");
+    searchInput.id = "searchInput";
+    searchInput.placeholder = "Search Shows";
+    searchInput.className = "search-input"; /// just giving everything a class name for css
+
+    const searchButton = document.createElement("button");
+    searchButton.textContent = "Search";
+    searchButton.className = "search-button"; // just giving everything a class name for css
+    searchButton.addEventListener("click", () => performSearch(searchInput.value)); // adding an event listener to the button to perform the search when clicked
+
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(searchButton);
+    document.body.appendChild(searchContainer); // appending everything
+};
+
+// Function to perform the search
+const performSearch = async (query) => { //takes in the query from the search input
+    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API
+    const searchResults = await response.json();
+    console.log(searchResults);
+    displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
+};
+
+createSearchElements();
 
 getItems(apiUrl);

@@ -18,11 +18,11 @@ body {
 
 #items-container {
     padding-top: 200px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
-    gap: 1vw;
+    grid-template-columns: auto auto auto auto auto auto ;
+    gap: 2vw;
     justify-content: center;
     align-items: center;
     align-content: center;
