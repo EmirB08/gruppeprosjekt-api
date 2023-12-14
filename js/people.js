@@ -63,7 +63,6 @@ const createItemCard = (item) => {
 const searchInput = document.querySelector("[data-search]");
 searchInput.addEventListener("input", (e) => {
   const value = e.target.value.toLowerCase();
-
   const filteredItems = allItems.filter((item) => {
     return (
       item.name.toLowerCase().includes(value) ||
