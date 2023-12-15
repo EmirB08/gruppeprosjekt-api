@@ -17,13 +17,24 @@ body {
 }
 
 #items-container {
-    padding-top: 200px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-top: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto ;
     gap: 1vw;
     justify-content: center;
     align-items: center;
     align-content: center;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+}
+
+.favorite-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    color: gold;
 }
