@@ -1,5 +1,5 @@
 const apiUrl = "https://api.tvmaze.com/shows";
-const itemsPerPage = 10; // Number of items to display per page
+const itemsPerPage = 18; // Number of items to display per page
 
 let currentPage = 1;
 let items = []; // Store items globally
@@ -7,14 +7,18 @@ let items = []; // Store items globally
 const getItems = async (url, page) => {
     const response = await fetch(`${url}?page=${page}`);
     items = await response.json(); // Update the global items variable
-    displayItems(items);
+    displayItems();
 };
 
-const displayItems = (items) => {
+const displayItems = () => {
     const container = document.getElementById("items-container") || createContainer("items-container");
     container.innerHTML = "";
 
-    items.forEach(item => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToDisplay = items.slice(startIndex, endIndex);
+
+    itemsToDisplay.forEach(item => {
         const card = createItemCard(item);
         container.appendChild(card);
     });
@@ -90,7 +94,7 @@ const performSearch = async (query) => {
 
         const searchResults = await response.json();
         items = searchResults.map(result => result.show); // Update the global items variable
-        displayItems(items);
+        displayItems();
     } catch (error) {
         console.error('Error performing search:', error);
         // Display an error message to the user if needed
@@ -109,7 +113,7 @@ const createPagination = () => {
         pageButton.className = currentPage === i ? "active" : "";
         pageButton.addEventListener("click", () => {
             currentPage = i;
-            getItems(apiUrl, currentPage);
+            displayItems();
         });
         paginationContainer.appendChild(pageButton);
     }
