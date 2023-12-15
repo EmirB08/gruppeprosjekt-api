@@ -45,10 +45,10 @@ const createItemCard = (item) => { //function to create a card that will display
         titleContainer.appendChild(title);
     }
 
-    const favoriteIcon = document.createElement("i"); // function for favorite icon that will be the way to store favorites which will be stored in local storage and displayed on the favorites page
-    favoriteIcon.className = "far fa-star favorite-icon"; // using font awesome icons
+    const favoriteIcon = document.createElement("i");
+    favoriteIcon.className = `fa-star favorite-icon ${JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id) ? "fas" : "far"}`;
     favoriteIcon.onclick = (e) => {
-        e.stopPropagation(); // makes the click event on the icon not trigger the click event on the card
+        e.stopPropagation();
         toggleFavorite(item, favoriteIcon);
     };
     titleContainer.appendChild(favoriteIcon);
@@ -131,12 +131,28 @@ window.onpopstate = (event) => {
     }
 };
 
-const toggleFavorite = (item, iconElement) => { //function to toggle the favorite icon
+const toggleFavorite = (item, iconElement) => {
+    const isFavorited = manageFavorites(item.id);
+    console.log(`Toggling favorite. Show ID: ${item.id}, Favorited: ${isFavorited}`); // adding a bit of logging cause I'm having some conceptualization issues with this //control favorite status and updates using the manageFavorites function
+    iconElement.classList.toggle("fas", isFavorited);
+    iconElement.classList.toggle("far", !isFavorited);
+};
 
-    const isFavorited = iconElement.classList.contains("fas"); //check if the icon is favorited
+const manageFavorites = (showId) => { //function to manage favorites, will be refactored later if I can think of something better
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || []; //get favorites from local storage, if it doesn't exist create an empty array
+    console.log(`Current favorites before update: ${favorites}`);
+    const index = favorites.indexOf(showId); // 
 
-    iconElement.classList.remove(isFavorited ? "fas" : "far"); //update the icon to the opposite
-    iconElement.classList.add(isFavorited ? "far" : "fas");
+    if (index === -1) { //if the show is not in the favorites array, add the show id to the array
+        favorites.push(showId);
+        console.log(`Added show to favorites. Show ID: ${showId}`);
+    } else {
+        favorites.splice(index, 1); // if the show is in the favorites array, remove it using splice for index
+        console.log(`Removed show from favorites. Show ID: ${showId}`);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites)); // stringify and set the favorites array in local storage
+    return favorites.includes(showId);
 };
 
 createSearchElements();
