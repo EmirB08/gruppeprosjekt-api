@@ -1,8 +1,12 @@
 const apiUrl = "https://api.tvmaze.com/shows";
+const itemsPerPage = 10; // Number of items to display per page
 
-const getItems = async (url) => {
-    const response = await fetch(url);
-    const items = await response.json();
+let currentPage = 1;
+let items = []; // Store items globally
+
+const getItems = async (url, page) => {
+    const response = await fetch(`${url}?page=${page}`);
+    items = await response.json(); // Update the global items variable
     displayItems(items);
 };
 
@@ -14,6 +18,8 @@ const displayItems = (items) => {
         const card = createItemCard(item);
         container.appendChild(card);
     });
+
+    createPagination();
 };
 
 const createContainer = (id) => {
@@ -61,7 +67,10 @@ const createSearchElements = () => {
     const searchButton = document.createElement("button");
     searchButton.textContent = "Search";
     searchButton.className = "search-button";
-    searchButton.addEventListener("click", () => performSearch(searchInput.value));
+    searchButton.addEventListener("click", () => {
+        currentPage = 1; // Reset to the first page when performing a new search
+        performSearch(searchInput.value);
+    });
 
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
@@ -74,19 +83,38 @@ const performSearch = async (query) => {
     container.innerHTML = ''; // Clear existing items
 
     try {
-        const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`);
+        const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}&page=${currentPage}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch search results. Status: ${response.status}`);
         }
 
         const searchResults = await response.json();
-        displayItems(searchResults.map(result => result.show));
+        items = searchResults.map(result => result.show); // Update the global items variable
+        displayItems(items);
     } catch (error) {
         console.error('Error performing search:', error);
         // Display an error message to the user if needed
     }
 };
 
+const createPagination = () => {
+    const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
+    paginationContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement("button");
+        pageButton.textContent = i;
+        pageButton.className = currentPage === i ? "active" : "";
+        pageButton.addEventListener("click", () => {
+            currentPage = i;
+            getItems(apiUrl, currentPage);
+        });
+        paginationContainer.appendChild(pageButton);
+    }
+};
+
 // Create search elements and fetch shows when the page loads
 createSearchElements();
-getItems(apiUrl);
+getItems(apiUrl, currentPage);
