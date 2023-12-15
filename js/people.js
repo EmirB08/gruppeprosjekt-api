@@ -66,7 +66,7 @@ const performSearch = async (query) => {
   const searchResults = await response.json();
   console.log(searchResults);
   displayItems(searchResults.map((result) => result.person));
-  if (length >= 0)
+  if (length >= 1)
 };
 // Event listener for the search input
 const searchInput = document.querySelector("[data-search]");
