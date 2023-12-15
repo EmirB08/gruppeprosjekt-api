@@ -66,6 +66,7 @@ const performSearch = async (query) => {
   const searchResults = await response.json();
   console.log(searchResults);
   displayItems(searchResults.map((result) => result.person));
+  if (length >= 0)
 };
 // Event listener for the search input
 const searchInput = document.querySelector("[data-search]");
@@ -75,7 +76,7 @@ searchInput.addEventListener("input", (e) => {
 });
 // Event listener for the search button
 const searchButton = document.getElementById("Search");
-searchButton.addEventListener("click", () => {
+searchButton.addEventListener("click", (e) => {
   const searchValue = searchInput.value.toLowerCase();
   performSearch(searchValue);
 });
