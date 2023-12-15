@@ -1,11 +1,10 @@
-const apiUrl = "https://api.tvmaze.com/search/shows?";
+const apiUrl = "https://api.tvmaze.com/shows?";// Im just using the people API, you replace this with whatever you are working on
 const searchShows = async () => {
   const searchInput = document.getElementById("search-input").value.toLowerCase();
-  const searchUrl = `${apiUrl}q=${searchInput}`;
+  const searchUrl = `${apiUrl}/search/shows?q=${encodeURIComponent(searchInput)}`;
   console.log("Search URL:", searchUrl); // Log the constructed URL
   getItems(searchUrl);
 };
-
 
 const getItems = async (url) => {
     const response = await fetch(url);
