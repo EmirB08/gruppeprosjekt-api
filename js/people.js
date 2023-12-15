@@ -64,7 +64,8 @@ const performSearch = async (query) => {
     `https://api.tvmaze.com/search/people?q=${query}`
   );
   const searchResults = await response.json();
-  displayItems(searchResults.map((result) => result.show));
+  console.log(searchResults);
+  displayItems(searchResults.map((result) => result.person));
 };
 // Event listener for the search input
 const searchInput = document.querySelector("[data-search]");
