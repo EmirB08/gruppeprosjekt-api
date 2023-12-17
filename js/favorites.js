@@ -1,17 +1,8 @@
-const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
-
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
     const container = document.createElement("div");
     container.id = id;
     document.body.appendChild(container);
     return container;
-};
-
-const getItems = async (url) => { //async function to get the items from the API
-    const response = await fetch(url);
-    const items = await response.json();
-    console.log(items);
-    displayItems(items); //calling the displayItems function to display the items
 };
 
 const displayItems = (items) => { //function to display the items
@@ -156,5 +147,24 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
 };
 
 createSearchElements();
-getItems(apiUrl);
-getTopRatedShows();
+
+const displayFavorites = async () => {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let favoriteShows = [];
+
+    for (const showId of favorites) {
+        const show = await fetchShowDetails(showId);
+        if (show) {
+            favoriteShows.push(show);
+        }
+    }
+
+    displayItems(favoriteShows);
+};
+
+document.addEventListener('DOMContentLoaded', displayFavorites);
+
+const fetchShowDetails = async (showId) => {
+    const response = await fetch(`https://api.tvmaze.com/shows/${showId}`);
+    return response.json();
+};
