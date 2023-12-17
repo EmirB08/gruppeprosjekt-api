@@ -84,10 +84,10 @@ const createSearchElements = () => { //function to create the search elements an
 };
 
 const performSearch = async (query) => { //takes in the query from the search input
-    const response = await fetch(`https://api.tvmaze.com/search/people?q=${query}`); //using the query to search the API
+    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API
     const searchResults = await response.json();
     console.log(searchResults); //
-    displayItems(searchResults.map(result => result.person)); //array map the search result, very similar to the displayItems function here
+    displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
 };
 
 const getTopRatedShows = async () => { // Function to get the top rated shows displayed on the home page
