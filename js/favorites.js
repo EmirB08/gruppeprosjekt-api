@@ -1,3 +1,5 @@
+// really just a copy of the index.js file with some changes to display favorites instead of top rated shows and some added functionality to manage favorites
+
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
     const container = document.createElement("div");
     container.id = id;
@@ -147,6 +149,8 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
 };
 
 createSearchElements();
+
+// functions unique to favorites page
 
 const displayFavorites = async () => {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
