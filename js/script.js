@@ -14,6 +14,7 @@ const getItems = async (url) => { //async function to get the items from the API
     displayItems(items); //calling the displayItems function to display the items
 };
 
+
 const displayItems = (items) => { //function to display the items
     const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
     container.innerHTML = "";
@@ -84,20 +85,30 @@ const createSearchElements = () => { //function to create the search elements an
 };
 
 const performSearch = async (query) => { //takes in the query from the search input
-    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API search endpoint
+    const response = await fetch(`https://api.tvmaze.com/search/people?q=${query}`); //using the query to search the API search endpoint
     const searchResults = await response.json();
     console.log(searchResults); //
-    displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
+    displayItems(searchResults.map(result => result.person)); //array map the search result, very similar to the displayItems function here
 };
 
-const getTopRatedShows = async () => { // Function to get the top rated shows displayed on the home page
-    const response = await fetch("https://api.tvmaze.com/shows");
-    const shows = await response.json();
+const fetchAndDisplayShows = async (showIds) => { //changed to display top rated shows from today's schedule, topRatedShows is now scheduled shows
+    const showsPromises = showIds.map(id => fetch(`https://api.tvmaze.com/shows/${id}`).then(res => res.json())); //map array to get the show ids and fetch the shows from the API
+    const shows = await Promise.all(showsPromises);
     
-    const topRatedShows = shows.sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0)).slice(0, 12); // Sort and slice to get top 16 shows based on rating
+    const topRatedShows = shows.sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0)).slice(0, 12); // Sort and slice to get top 12 based on rating shows
 
     displayItems(topRatedShows);
 };
+
+const getSchedule = async () => { //get the schedule from the API and display the top rated shows
+    const scheduleResponse = await fetch('https://api.tvmaze.com/schedule');
+    const schedule = await scheduleResponse.json();
+    const uniqueShowIds = Array.from(new Set(schedule.map(episode => episode.show.id))); //get unique show ids from the schedule
+
+    fetchAndDisplayShows(uniqueShowIds);
+};
+
+getSchedule();
 
 const displayShowDetails = (item) => { // Function to display the show details when clicked, using browser history API to update the URL
     const container = document.getElementById("items-container");
@@ -122,12 +133,13 @@ const displayShowDetails = (item) => { // Function to display the show details w
     window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
 };
 
-window.onpopstate = (event) => {
+window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
     if (event.state && event.state.show) { // If there's a show in the history state, display it
             displayShowDetails(event.state.show);
     } else {
-    
-        getTopRatedShows(); // display the "home page" if there's no show in the history state
+        const container = document.getElementById("items-container");
+        container.innerHTML = '';
+        getSchedule(); //calls the getSchedule function to display the "home page" if there's no show in the history state
     }
 };
 
@@ -158,3 +170,4 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
 createSearchElements();
 getItems(apiUrl);
 getTopRatedShows();
+fetchAndDisplayShows();

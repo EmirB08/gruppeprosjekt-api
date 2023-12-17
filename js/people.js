@@ -4,6 +4,7 @@ const getItems = async (url) => {
   //async function to get the items from the API
   const response = await fetch(url);
   const items = await response.json();
+  console.log(items);
   displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
