@@ -31,27 +31,26 @@ const displayItems = () => {
 };
 
 const createPagination = () => { // some error in your function Illakia, must fix, keeping it like it is for now
-  const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
-  paginationContainer.innerHTML = "";
+    const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
+    paginationContainer.innerHTML = "";
 
-  const totalPages = Math.ceil(items.length / itemsPerPage);
+    const totalPages = Math.ceil(items.length / itemsPerPage);
 
   // Previous Button
-  const prevButton = document.createElement("button");
-  prevButton.textContent = "Previous";
-  prevButton.addEventListener("click", () => {
-      if (currentPage > 1) {
-          currentPage--;
-          displayItems();
-      }
-  });
-  paginationContainer.appendChild(prevButton);
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.addEventListener("click", () => {
+        if (currentPage > 1) {
+        currentPage--;
+        displayItems();
+    }
+    });
+    paginationContainer.appendChild(prevButton);
 
-  
   // Next Button
-  const nextButton = document.createElement("button");
-  nextButton.textContent = "Next";
-  nextButton.addEventListener("click", async () => {
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.addEventListener("click", async () => {
     if (currentPage < totalPages) {
         currentPage++;
         displayItems();
