@@ -1,8 +1,53 @@
+const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
+
 const getItems = async (url) => { //async function to get the items from the API
     const response = await fetch(url);
     const items = await response.json();
     console.log(items);
     displayItems(items); //calling the displayItems function to display the items
+};
+
+const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
+    const container = document.createElement("div");
+    container.id = id;
+    document.body.appendChild(container);
+    return container;
+};
+
+const displayItems = (items) => { //function to display the items
+    const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
+    container.innerHTML = "";
+
+    items.forEach(item => {
+        const card = createItemCard(item);
+        container.appendChild(card);
+    });
+};
+
+const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
+    const searchContainer = document.createElement("div");
+    searchContainer.className = "search-container";
+
+    const searchInput = document.createElement("input");
+    searchInput.id = "searchInput";
+    searchInput.placeholder = "Search Shows";
+    searchInput.className = "search-input";
+
+    const searchButton = document.createElement("button");
+    searchButton.textContent = "Search";
+    searchButton.className = "search-button";
+    searchButton.addEventListener("click", () => performSearch(searchInput.value)); // will include enter key functionality later
+
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(searchButton);
+    document.body.appendChild(searchContainer); // appending everything
+};
+
+const performSearch = async (query) => { //takes in the query from the search input
+    const response = await fetch(`https://api.tvmaze.com/search/people?q=${query}`); //using the query to search the API search endpoint
+    const searchResults = await response.json();
+    console.log(searchResults); //
+    displayItems(searchResults.map(result => result.person)); //array map the search result, very similar to the displayItems function here
 };
 
 const createItemCard = (item) => { //function to create a card that will display the item and the necessary data elements
@@ -92,4 +137,4 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
     return favorites.includes(showId);
 };
 
-export { createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
+export { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
