@@ -57,4 +57,4 @@ const createItemCard = (item) => {
   return card;
 };
 
-getItems(apiUrl);
+getItems(apiUrl, currentPage);

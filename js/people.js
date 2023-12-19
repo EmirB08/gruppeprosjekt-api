@@ -3,7 +3,7 @@ const getItems = async (url, page = 1, pageSize = 20) => {
   const response = await fetch(`${url}?page=${page}&size=${pageSize}`);
   const items = await response.json();
   console.log(items);
-  displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
+  displayItems(items, page, pageSize); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
 const displayItems = (items) => {
@@ -12,7 +12,7 @@ const displayItems = (items) => {
     document.getElementById("items-container") ||
     createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
   container.innerHTML = "";
-
+  const itemsToShow = items.slice(0, 20);
   items.forEach((item) => {
     const card = createItemCard(item);
     container.appendChild(card);
@@ -68,7 +68,11 @@ const performSearch = async (query, page = 1, pageSize = 20) => {
     );
     const searchResults = await response.json();
     console.log(searchResults);
-    displayItems(searchResults.map((result) => result.person));
+    displayItems(
+      searchResults.map((result) => result.person),
+      page,
+      pageSize
+    );
   }
 };
 // Event listener for the search input
@@ -83,7 +87,6 @@ searchButton.addEventListener("click", () => {
   const searchValue = searchInput.value.toLowerCase();
   performSearch(searchValue);
 });
-getItems(apiUrl);
 /* ------------
 !!! Paginator !!!
 ------------- */
@@ -98,8 +101,8 @@ const createPaginationButton = (text, id, clickHandler) => {
 };
 
 // Function to handle pagination
-const handlePagination = (pageNumber) => {
-  performSearch(searchInput.value.toLowerCase(), pageNumber, 20);
+const handlePagination = (pageSize) => {
+  performSearch(searchInput.value.toLowerCase(), pageSize, 20);
 };
 
 // Function to update current page and perform search
@@ -123,3 +126,5 @@ const nextButton = createPaginationButton("Next Page", "nextPage", () => {
   updatePageAndSearch(1);
 });
 paginationContainer.appendChild(nextButton);
+
+getItems(apiUrl, currentPage);
