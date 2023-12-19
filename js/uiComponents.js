@@ -48,6 +48,7 @@ const performSearch = async (query) => { //takes in the query from the search in
     const searchResults = await response.json();
     console.log(searchResults); //
     displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
+    window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
 };
 
 const createItemCard = (item) => { //function to create a card that will display the item and the necessary data elements

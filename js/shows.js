@@ -69,12 +69,11 @@ window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON T
     if (event.state && event.state.show) { // If there's a show in the history state, display it
             displayShowDetails(event.state.show);
     } else {
-        const container = document.getElementById("items-container");
+        const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
         container.innerHTML = '';
-        getItems(apiUrl, currentPage); //calls the getSchedule function to display the "home page" if there's no show in the history state
+        getItems(apiUrl,currentPage); //only need to change this to the "default" page of shows.js
     }
 };
 
-// Create search elements and fetch shows when the page loads
 createSearchElements();
 getItems(apiUrl, currentPage);
