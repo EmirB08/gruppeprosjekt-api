@@ -123,13 +123,11 @@ const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
   if (currentPage > 1) {
     updatePageAndSearch(-1);
   }
-  console.log("privius");
 });
 paginationContainer.appendChild(prevButton);
 
 const nextButton = createPaginationButton("Next Page", "nextPage", () => {
   updatePageAndSearch(1);
-  console.log("next");
 });
 paginationContainer.appendChild(nextButton);
 
