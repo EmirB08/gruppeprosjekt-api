@@ -104,8 +104,6 @@ const performSearch = async (query) => {
     }
 };
 
-
-
 const createPagination = () => {
   const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
   paginationContainer.innerHTML = "";
