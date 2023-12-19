@@ -125,14 +125,17 @@ const createPagination = () => {
   // Next Button
   const nextButton = document.createElement("button");
   nextButton.textContent = "Next";
-  nextButton.addEventListener("click", () => {
-      if (currentPage < totalPages) {
-          currentPage++;
-          displayItems();
-      }
-  });
-  paginationContainer.appendChild(nextButton);
-};
+  nextButton.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayItems();
+    } else {
+        currentPage++;
+        await getItems(apiUrl, currentPage);
+    }
+});
+paginationContainer.appendChild(nextButton);
+}; 
 
 
 
