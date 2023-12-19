@@ -1,8 +1,8 @@
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
-const getItems = async (url) => {
-  //async function to get the items from the API
-  const response = await fetch(url);
+const getItems = async (url, page = 1, pageSize = 20) => {
+  const response = await fetch(`${url}?page=${page}&size=${pageSize}`);
   const items = await response.json();
+  console.log(items);
   displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
@@ -59,14 +59,17 @@ const createItemCard = (item) => {
 !!! Search !!!
 ------------- */
 // Function to perform the search
-const performSearch = async (query) => {
-  const response = await fetch(
-    `https://api.tvmaze.com/search/people?q=${query}`
-  );
-  const searchResults = await response.json();
-  console.log(searchResults);
-  displayItems(searchResults.map((result) => result.person));
-  if (length >= 1)
+const performSearch = async (query, page = 1, pageSize = 20) => {
+  if (query.trim() === "") {
+    getItems(apiUrl, page, pageSize);
+  } else {
+    const response = await fetch(
+      `https://api.tvmaze.com/search/people?q=${query}&page=${page}&size=${pageSize}`
+    );
+    const searchResults = await response.json();
+    console.log(searchResults);
+    displayItems(searchResults.map((result) => result.person));
+  }
 };
 // Event listener for the search input
 const searchInput = document.querySelector("[data-search]");
@@ -76,8 +79,47 @@ searchInput.addEventListener("input", (e) => {
 });
 // Event listener for the search button
 const searchButton = document.getElementById("Search");
-searchButton.addEventListener("click", (e) => {
+searchButton.addEventListener("click", () => {
   const searchValue = searchInput.value.toLowerCase();
   performSearch(searchValue);
 });
 getItems(apiUrl);
+/* ------------
+!!! Paginator !!!
+------------- */
+let currentPage = 1;
+// Function to create pagination buttons
+const createPaginationButton = (text, id, clickHandler) => {
+  const button = document.createElement("button");
+  button.textContent = text;
+  button.id = id;
+  button.addEventListener("click", clickHandler);
+  return button;
+};
+
+// Function to handle pagination
+const handlePagination = (pageNumber) => {
+  performSearch(searchInput.value.toLowerCase(), pageNumber, 20);
+};
+
+// Function to update current page and perform search
+const updatePageAndSearch = (increment) => {
+  currentPage += increment;
+  handlePagination(currentPage);
+};
+
+const paginationContainer = document.createElement("div");
+paginationContainer.id = "pagination";
+document.body.appendChild(paginationContainer);
+
+const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
+  if (currentPage > 1) {
+    updatePageAndSearch(-1);
+  }
+});
+paginationContainer.appendChild(prevButton);
+
+const nextButton = createPaginationButton("Next Page", "nextPage", () => {
+  updatePageAndSearch(1);
+});
+paginationContainer.appendChild(nextButton);
