@@ -6,13 +6,16 @@ const getItems = async (url, page = 1, pageSize = 20) => {
   displayItems(items, page, pageSize); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
-const displayItems = (items) => {
+const displayItems = (items, page, pageSize) => {
   //function to display the items
   const container =
     document.getElementById("items-container") ||
     createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
   container.innerHTML = "";
-  const itemsToShow = items.slice(0, 20);
+
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const itemsToShow = items.slice(startIndex, endIndex);
   items.forEach((item) => {
     const card = createItemCard(item);
     container.appendChild(card);
@@ -106,9 +109,9 @@ const handlePagination = (pageSize) => {
 };
 
 // Function to update current page and perform search
-const updatePageAndSearch = (increment) => {
+const updatePageAndSearch = (increment, pageSize) => {
   currentPage += increment;
-  handlePagination(currentPage);
+  handlePagination(pageSize);
 };
 
 const paginationContainer = document.createElement("div");
@@ -117,14 +120,14 @@ document.body.appendChild(paginationContainer);
 
 const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
   if (currentPage > 1) {
-    updatePageAndSearch(-1);
+    updatePageAndSearch(-1, pageSize);
   }
 });
 paginationContainer.appendChild(prevButton);
 
 const nextButton = createPaginationButton("Next Page", "nextPage", () => {
-  updatePageAndSearch(1);
+  updatePageAndSearch(1, pageSize);
 });
 paginationContainer.appendChild(nextButton);
 
-getItems(apiUrl, currentPage);
+getItems(apiUrl, currentPage, 20);
