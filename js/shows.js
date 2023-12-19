@@ -1,4 +1,4 @@
-import { createContainer, createItemCard, createSearchElements, performSearch } from "./uiComponents.js";
+import { createContainer, createItemCard, createSearchElements, performSearch, displayShowDetails, toggleFavorite, manageFavorites } from "./uiComponents.js";
 
 const apiUrl = "https://api.tvmaze.com/shows";
 const itemsPerPage = 18; // Number of items to display per page
@@ -30,9 +30,7 @@ const displayItems = () => {
     createPagination();
 };
 
-
-
-const createPagination = () => {
+const createPagination = () => { // some error in your function Illakia, must fix, keeping it like it is for now
   const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
   paginationContainer.innerHTML = "";
 
@@ -71,7 +69,7 @@ window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON T
     } else {
         const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
         container.innerHTML = '';
-        getItems(apiUrl,currentPage); //only need to change this to the "default" page of shows.js
+        getItems(apiUrl,currentPage); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
     }
 };
 

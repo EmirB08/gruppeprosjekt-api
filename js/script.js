@@ -23,7 +23,7 @@ window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON T
     } else {
         const container = document.getElementById("items-container");
         container.innerHTML = '';
-        getSchedule(); //calls the getSchedule function to display the "home page" if there's no show in the history state
+        getSchedule(); //calls the getSchedule function to display the "home page" if there's no show in the history state - will fix this later
     }
 };
 
