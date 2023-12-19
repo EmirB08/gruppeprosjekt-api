@@ -70,7 +70,6 @@ const performSearch = async (query, page = 1, pageSize = 20) => {
       `https://api.tvmaze.com/search/people?q=${query}&page=${page}&size=${pageSize}`
     );
     const searchResults = await response.json();
-    console.log(searchResults);
     displayItems(
       searchResults.map((result) => result.person),
       page,
@@ -102,16 +101,18 @@ const createPaginationButton = (text, id, clickHandler) => {
   button.addEventListener("click", clickHandler);
   return button;
 };
-
+// Set the default pageSize
+let pageSize = 20;
 // Function to handle pagination
 const handlePagination = (pageSize) => {
-  performSearch(searchInput.value.toLowerCase(), pageSize, 20);
+  performSearch(searchInput.value.toLowerCase(), pageSize);
 };
 
 // Function to update current page and perform search
-const updatePageAndSearch = (increment, pageSize) => {
+const updatePageAndSearch = (increment) => {
   currentPage += increment;
-  handlePagination(pageSize);
+  handlePagination();
+  console.log(currentPage);
 };
 
 const paginationContainer = document.createElement("div");
@@ -120,14 +121,16 @@ document.body.appendChild(paginationContainer);
 
 const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
   if (currentPage > 1) {
-    updatePageAndSearch(-1, pageSize);
+    updatePageAndSearch(-1);
   }
+  console.log("privius");
 });
 paginationContainer.appendChild(prevButton);
 
 const nextButton = createPaginationButton("Next Page", "nextPage", () => {
-  updatePageAndSearch(1, pageSize);
+  updatePageAndSearch(1);
+  console.log("next");
 });
 paginationContainer.appendChild(nextButton);
 
-getItems(apiUrl, currentPage, 20);
+getItems(apiUrl, currentPage, pageSize);
