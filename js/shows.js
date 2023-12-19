@@ -7,6 +7,7 @@ let items = []; // Store items globally
 const getItems = async (url, page) => {
     const response = await fetch(`${url}?page=${page}`);
     items = await response.json();
+    console.log(items);
     currentPage = 1; // Update the global items variable
     displayItems();
 };
