@@ -137,4 +137,13 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
     return favorites.includes(showId);
 };
 
+const getTopRatedShows = async () => { // Function to get the top rated shows displayed on the home page
+    const response = await fetch("https://api.tvmaze.com/shows");
+    const shows = await response.json();
+    
+    const topRatedShows = shows.sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0)).slice(0, 12); // Sort and slice to get top 16 shows based on rating
+
+    displayItems(topRatedShows);
+};
+
 export { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
