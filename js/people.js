@@ -87,6 +87,7 @@ getItems(apiUrl);
 /* ------------
 !!! Paginator !!!
 ------------- */
+let currentPage = 1;
 // Function to create pagination buttons
 const createPaginationButton = (text, id, clickHandler) => {
   const button = document.createElement("button");
@@ -107,7 +108,6 @@ const updatePageAndSearch = (increment) => {
   handlePagination(currentPage);
 };
 
-let currentPage = 1;
 const paginationContainer = document.createElement("div");
 paginationContainer.id = "pagination";
 document.body.appendChild(paginationContainer);
