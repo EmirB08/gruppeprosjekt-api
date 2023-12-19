@@ -68,4 +68,28 @@ const displayShowDetails = (item) => { // Function to display the show details w
     window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
 };
 
-export { createItemCard, displayShowDetails };
+const toggleFavorite = (item, iconElement) => {
+    const isFavorited = manageFavorites(item.id);
+    console.log(`Toggling favorite. Show ID: ${item.id}, Favorited: ${isFavorited}`); // adding a bit of logging cause I'm having some conceptualization issues with this //control favorite status and updates using the manageFavorites function
+    iconElement.classList.toggle("fas", isFavorited);
+    iconElement.classList.toggle("far", !isFavorited);
+};
+
+const manageFavorites = (showId) => { //function to manage favorites, will be refactored later if I can think of something better
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || []; //get favorites from local storage, if it doesn't exist create an empty array
+    console.log(`Current favorites before update: ${favorites}`);
+    const index = favorites.indexOf(showId); // 
+
+    if (index === -1) { //if the show is not in the favorites array, add the show id to the array
+        favorites.push(showId);
+        console.log(`Added show to favorites. Show ID: ${showId}`);
+    } else {
+        favorites.splice(index, 1); // if the show is in the favorites array, remove it using splice for index
+        console.log(`Removed show from favorites. Show ID: ${showId}`);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites)); // stringify and set the favorites array in local storage
+    return favorites.includes(showId);
+};
+
+export { createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
