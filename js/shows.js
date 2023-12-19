@@ -5,25 +5,29 @@ let currentPage = 1;
 let items = []; // Store items globally
 
 const getItems = async (url, page) => {
-    const response = await fetch(`${url}?page=${page}`);
-    items = await response.json(); // Update the global items variable
-    displayItems();
+  const response = await fetch(`${url}?page=${page}`);
+  const data = await response.json();
+
+  // Update the global items variable only if there are items in the current page
+  if (data.length > 0) {
+      items = data;
+      displayItems();
+  } else {
+      // Handle the end of the paginated results
+      console.log("No more items to fetch");
+  }
 };
 
 const displayItems = () => {
-    const container = document.getElementById("items-container") || createContainer("items-container");
-    container.innerHTML = "";
+  const container = document.getElementById("items-container") || createContainer("items-container");
+  container.innerHTML = "";
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const itemsToDisplay = items.slice(startIndex, endIndex);
+  items.forEach(item => {
+      const card = createItemCard(item);
+      container.appendChild(card);
+  });
 
-    itemsToDisplay.forEach(item => {
-        const card = createItemCard(item);
-        container.appendChild(card);
-    });
-
-    createPagination();
+  createPagination();
 };
 
 const createContainer = (id) => {
@@ -108,15 +112,13 @@ const createPagination = () => {
   const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
   paginationContainer.innerHTML = "";
 
-  const totalPages = Math.ceil(items.length / itemsPerPage);
-
   // Previous Button
   const prevButton = document.createElement("button");
   prevButton.textContent = "Previous";
   prevButton.addEventListener("click", () => {
       if (currentPage > 1) {
           currentPage--;
-          displayItems();
+          getItems(apiUrl, currentPage);
       }
   });
   paginationContainer.appendChild(prevButton);
@@ -125,17 +127,11 @@ const createPagination = () => {
   const nextButton = document.createElement("button");
   nextButton.textContent = "Next";
   nextButton.addEventListener("click", () => {
-      if (currentPage < totalPages) {
-          currentPage++;
-          displayItems();
-      }
+      currentPage++;
+      getItems(apiUrl, currentPage);
   });
   paginationContainer.appendChild(nextButton);
 };
-
-
-
-
 
 // Create search elements and fetch shows when the page loads
 createSearchElements();
