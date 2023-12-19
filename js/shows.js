@@ -59,6 +59,7 @@ const createItemCard = (item) => {
     return card;
 };
 
+
 const createSearchElements = () => {
     const searchContainer = document.createElement("div");
     searchContainer.className = "search-container";
@@ -101,23 +102,40 @@ const performSearch = async (query) => {
     }
 };
 
+
+
 const createPagination = () => {
-    const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
-    paginationContainer.innerHTML = "";
+  const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
+  paginationContainer.innerHTML = "";
 
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+  const totalPages = Math.ceil(items.length / itemsPerPage);
 
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement("button");
-        pageButton.textContent = i;
-        pageButton.className = currentPage === i ? "active" : "";
-        pageButton.addEventListener("click", () => {
-            currentPage = i;
-            displayItems();
-        });
-        paginationContainer.appendChild(pageButton);
-    }
+  // Previous Button
+  const prevButton = document.createElement("button");
+  prevButton.textContent = "Previous";
+  prevButton.addEventListener("click", () => {
+      if (currentPage > 1) {
+          currentPage--;
+          displayItems();
+      }
+  });
+  paginationContainer.appendChild(prevButton);
+
+  // Next Button
+  const nextButton = document.createElement("button");
+  nextButton.textContent = "Next";
+  nextButton.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+          currentPage++;
+          displayItems();
+      }
+  });
+  paginationContainer.appendChild(nextButton);
 };
+
+
+
+
 
 // Create search elements and fetch shows when the page loads
 createSearchElements();
