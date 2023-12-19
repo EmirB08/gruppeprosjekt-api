@@ -4,31 +4,12 @@ const itemsPerPage = 18; // Number of items to display per page
 let currentPage = 1;
 let items = []; // Store items globally
 
-
-let currentSort = "name"; // Default sorting option
-
-const getItems = async (url, page, sort) => {
-    const response = await fetch(`${url}?page=${page}&sort=${sort}`);
-    const data = await response.json();
-    items = data.sort((a, b) => {
-        // Custom sorting logic based on the selected option
-        if (sort === "name") {
-            return a.name.localeCompare(b.name);
-        } else if (sort === "-name") {
-            return b.name.localeCompare(a.name);
-        } else if (sort === "rating") {
-            return b.rating.average - a.rating.average;
-        } else if (sort === "-rating") {
-            return a.rating.average - b.rating.average;
-        } else {
-            // Add more sorting options if needed
-            return 0;
-        }
-    });
-
+const getItems = async (url, page) => {
+    const response = await fetch(`${url}?page=${page}`);
+    items = await response.json();
+    currentPage = 1; // Update the global items variable
     displayItems();
 };
-
 
 const displayItems = () => {
     const container = document.getElementById("items-container") || createContainer("items-container");
@@ -45,29 +26,6 @@ const displayItems = () => {
 
     createPagination();
 };
-
-const createSortDropdown = () => {
-    const sortContainer = createContainer("sort-container");
-    sortContainer.className = "sort-container";
-
-    const sortDropdown = document.createElement("select");
-    sortDropdown.id = "sort-dropdown";
-    sortDropdown.innerHTML = `
-        <option value="name">Sort by A-Z</option>
-        <option value="-name">Sort by Z-A</option>
-        <option value="rating">Sort by Rating (Most Popular)</option>
-        <option value="-rating">Sort by Rating (Less Popular)</option>
-        <!-- Add more sorting options if needed -->
-    `;
-    sortDropdown.addEventListener("change", () => {
-        currentSort = sortDropdown.value;
-        currentPage = 1; // Reset to the first page when changing sorting
-        getItems(apiUrl, currentPage, currentSort);
-    });
-
-    sortContainer.appendChild(sortDropdown);
-};
-
 
 const createContainer = (id) => {
     const container = document.createElement("div");
@@ -125,8 +83,6 @@ const createSearchElements = () => {
     document.body.appendChild(searchContainer);
 };
 
-
-
 const performSearch = async (query) => {
     query = query.toLowerCase();
     const container = document.getElementById("items-container");
@@ -180,14 +136,11 @@ const createPagination = () => {
     }
 });
 paginationContainer.appendChild(nextButton);
-}; 
+};
 
 
-
-    
 
 
 // Create search elements and fetch shows when the page loads
 createSearchElements();
-createSortDropdown();
-getItems(apiUrl, currentPage, currentSort);
+getItems(apiUrl, currentPage);
