@@ -1,3 +1,5 @@
+import { createItemCard, displayShowDetails } from './uiComponents.js';
+
 const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
 
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
@@ -7,12 +9,7 @@ const createContainer = (id) => { // utility function to create a container with
     return container;
 };
 
-const getItems = async (url) => { //async function to get the items from the API
-    const response = await fetch(url);
-    const items = await response.json();
-    console.log(items);
-    displayItems(items); //calling the displayItems function to display the items
-};
+
 
 
 const displayItems = (items) => { //function to display the items
@@ -23,46 +20,6 @@ const displayItems = (items) => { //function to display the items
         const card = createItemCard(item);
         container.appendChild(card);
     });
-};
-
-const createItemCard = (item) => { //function to create a card that will display the item and the necessary data elements
-    const card = document.createElement("div");
-    card.className = "item-card";
-
-    const image = document.createElement("img");
-    image.src = item.image ? item.image.medium : "placeholder.jpg";
-    image.alt = item.name || item.title || "Image";
-    image.className = "item-image";
-    card.appendChild(image);
-
-    const titleContainer = document.createElement("div"); // decided to create a separate container for css reasons
-    titleContainer.className = "title-container";
-    card.appendChild(titleContainer); // append the title container to the main
-
-    if (item.name || item.title) { //resusability between shows/people/movies
-        const title = document.createElement("h4");
-        title.textContent = item.name || item.title;
-        title.className = "item-title";
-        titleContainer.appendChild(title);
-    }
-
-    const favoriteIcon = document.createElement("i");
-    favoriteIcon.className = `fa-star favorite-icon ${JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id) ? "fas" : "far"}`;
-    favoriteIcon.onclick = (e) => {
-        e.stopPropagation();
-        toggleFavorite(item, favoriteIcon);
-    };
-    titleContainer.appendChild(favoriteIcon);
-
-    if (item.rating && item.rating.average) { // Create a rating element if the item has a rating
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        rating.className = "item-rating";
-        card.appendChild(rating);
-    }
-
-    card.addEventListener("click", () => displayShowDetails(item)); // Add click event listener to show information when clicked
-    return card;
 };
 
 const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
@@ -109,29 +66,6 @@ const getSchedule = async () => { //get the schedule from the API and display th
 };
 
 getSchedule();
-
-const displayShowDetails = (item) => { // Function to display the show details when clicked, using browser history API to update the URL
-    const container = document.getElementById("items-container");
-    container.innerHTML = ''; // Clear existing content
-
-    const title = document.createElement("h2"); // very basic for now, will add more details later and classes for css
-    title.textContent = item.name;
-    container.appendChild(title);
-
-    if (item.summary) {
-        const summary = document.createElement("p");
-        summary.innerHTML = item.summary;
-        container.appendChild(summary);
-    }
-
-    if (item.rating && item.rating.average) {
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        container.appendChild(rating);
-    }
-    
-    window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
-};
 
 window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
     if (event.state && event.state.show) { // If there's a show in the history state, display it
