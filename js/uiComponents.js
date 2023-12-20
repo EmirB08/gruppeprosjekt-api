@@ -1,12 +1,16 @@
-const apiEndpoints = { //these are the API endpoints that will be used to get the data, separated by type for main pages
-    shows: page => `https://api.tvmaze.com/shows?page=${page}`,
-    people: page => `https://api.tvmaze.com/people?page=${page}`
+let currentPage = 0;
+const itemsPerPage = 18; // Define itemsPerPage
+
+const createPages = (url) => {
+    document.getElementById('prev-btn').addEventListener('click', () => currentPage > 1 && getItems(url, --currentPage));
+    document.getElementById('next-btn').addEventListener('click', () => getItems(url, ++currentPage));
+    getItems(url, currentPage);
 };
 
-const getItems = async (url, page) => { //function to get the items from the API, now will take in both the url and the page as parameters
-    const response = await fetch(url(page));
+const getItems = async (url, page) => {
+    const response = await fetch(`${url}?page=${page}`);
     const data = await response.json();
-    displayItems(data.slice(0, itemsPerPage)); //display the items, slice the data to get the itemsPerPage
+    displayItems(data.slice(0, itemsPerPage));
 };
 
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
@@ -153,4 +157,4 @@ const getTopRatedShows = async () => { // Function to get the top rated shows di
 
 
 
-export { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
+export { getItems, currentPage, createPages, createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
