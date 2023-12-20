@@ -1,4 +1,7 @@
-const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
+const apiEndpoints = { //these are the API endpoints that will be used to get the data, separated by type for main pages
+    shows: page => `https://api.tvmaze.com/shows?page=${page}`,
+    people: page => `https://api.tvmaze.com/people?page=${page}`
+};
 
 const getItems = async (url, page) => { //function to get the items from the API, now will take in both the url and the page as parameters
     const response = await fetch(url(page));
