@@ -3,6 +3,9 @@ const getItems = async (url, page = 1, pageSize = 20) => {
   const response = await fetch(`${url}?page=${page}&size=${pageSize}`);
   const items = await response.json();
   console.log(items);
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const itemsToShow = items.slice(startIndex, endIndex);
   displayItems(items, page, pageSize); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
 };
 
@@ -13,9 +16,9 @@ const displayItems = (items, page, pageSize) => {
     createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
   container.innerHTML = "";
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const itemsToShow = items.slice(startIndex, endIndex);
+  // const startIndex = (page - 1) * pageSize;
+  // const endIndex = startIndex + pageSize;
+  // const itemsToShow = items.slice(startIndex, endIndex);
   items.forEach((item) => {
     const card = createItemCard(item);
     container.appendChild(card);
@@ -104,13 +107,16 @@ const createPaginationButton = (text, id, clickHandler) => {
 // Set the default pageSize
 let pageSize = 20;
 // Function to handle pagination
-const handlePagination = (pageSize) => {
-  performSearch(searchInput.value.toLowerCase(), pageSize);
+const handlePagination = () => {
+  getItems(apiUrl, currentPage, pageSize);
 };
 
 // Function to update current page and perform search
 const updatePageAndSearch = (increment) => {
   currentPage += increment;
+  if (currentPage < 1) {
+    currentPage = 1;
+  }
   handlePagination();
   console.log(currentPage);
 };
