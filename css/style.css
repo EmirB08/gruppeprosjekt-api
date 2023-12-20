@@ -48,6 +48,7 @@ a,
 .user {
   text-decoration: none;
   cursor: pointer;
+  transition: 1s color;
 }
 /* ------------
 !!! Hover !!!
@@ -72,15 +73,9 @@ user {
 header {
   display: block;
 }
-
-/* ------------
-!!! Hero !!!
---------------- */
-#hero {
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  margin: 50px 100px;
+input {
+  border-radius: 5px;
+  padding: 2px;
 }
 /* ------------
 !!! Items !!!
