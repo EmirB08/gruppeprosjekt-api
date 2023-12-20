@@ -1,5 +1,7 @@
 let currentPage = 0;
-const itemsPerPage = 18; // Define itemsPerPage
+const itemsPerPage = 100;
+const totalArray = [];   // Array to hold all fetched data
+let totalPages = 0;   // Define itemsPerPage
 
 const createPages = (url) => {
     document.getElementById('prev-btn').addEventListener('click', () => currentPage > 1 && getItems(url, --currentPage));
@@ -10,6 +12,7 @@ const createPages = (url) => {
 const getItems = async (url, page) => {
     const response = await fetch(`${url}?page=${page}`);
     const data = await response.json();
+    console.log(data);
     displayItems(data.slice(0, itemsPerPage));
 };
 
