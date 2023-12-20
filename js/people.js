@@ -1,4 +1,4 @@
-import { createItemCard, displayShowDetails } from './uiComponents.js';
+import {createContainer, createItemCard, displayShowDetails, createSearchElements, toggleFavorite, manageFavorites } from './uiComponents.js';
 
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
 const getItems = async (url, page = 1, pageSize = 20) => {
@@ -24,19 +24,11 @@ const displayItems = (items, page, pageSize) => {
   });
 };
 
-const createContainer = (id) => {
-  //function to create a container with the given id
-  const container = document.createElement("div");
-  container.id = id;
-  document.body.appendChild(container);
-  return container;
-};
-
 /* ------------
 !!! Search !!!
 ------------- */
 // Function to perform the search
-const performSearch = async (query, page = 1, pageSize = 20) => {
+const performSearch = async (query, page = 1, pageSize = 20) => {  // this is very intense on the API, will need to be changed Andre
   if (query.trim() === "") {
     getItems(apiUrl, page, pageSize);
   } else {

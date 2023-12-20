@@ -43,7 +43,7 @@ const createSearchElements = () => { //function to create the search elements an
     document.body.appendChild(searchContainer); // appending everything
 };
 
-const performSearch = async (query) => { //takes in the query from the search input
+const performSearch = async (query) => { //takes in the query from the search input 
     const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API search endpoint
     const searchResults = await response.json();
     console.log(searchResults); //

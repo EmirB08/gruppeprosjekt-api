@@ -1,4 +1,4 @@
-import { createContainer, createItemCard, createSearchElements, performSearch, displayShowDetails, toggleFavorite, manageFavorites } from "./uiComponents.js";
+import { createContainer, createItemCard, createSearchElements, displayShowDetails, toggleFavorite, manageFavorites } from "./uiComponents.js";
 
 const apiUrl = "https://api.tvmaze.com/shows";
 const itemsPerPage = 18; // Number of items to display per page
