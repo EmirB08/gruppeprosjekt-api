@@ -1,10 +1,9 @@
 const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
 
-const getItems = async (url, page) => { //async function to get the items from the API
-    const response = await fetch(url);
-    const items = await response.json();
-    console.log(items);
-    displayItems(items); //calling the displayItems function to display the items
+const getItems = async (url, page) => { //function to get the items from the API, now will take in both the url and the page as parameters
+    const response = await fetch(url(page));
+    const data = await response.json();
+    displayItems(data.slice(0, itemsPerPage)); //display the items, slice the data to get the itemsPerPage
 };
 
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
