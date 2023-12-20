@@ -1,3 +1,5 @@
+import {createContainer, createItemCard, displayShowDetails, createSearchElements, toggleFavorite, manageFavorites } from './uiComponents.js';
+
 const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
 const getItems = async (url, page = 1, pageSize = 20) => {
   const response = await fetch(`${url}?page=${page}&size=${pageSize}`);
@@ -25,47 +27,11 @@ const displayItems = (items, page, pageSize) => {
   });
 };
 
-const createContainer = (id) => {
-  //function to create a container with the given id
-  const container = document.createElement("div");
-  container.id = id;
-  document.body.appendChild(container);
-  return container;
-};
-
-const createItemCard = (item) => {
-  //function to create a card for the given item, reusable for other types of items
-  const card = document.createElement("div");
-  card.className = "item-card";
-
-  const image = document.createElement("img"); // Create an image element
-  image.src = item.image ? item.image.medium : "placeholder.jpg";
-  image.alt = item.name || item.title || "Image";
-  image.className = "item-image";
-  card.appendChild(image);
-
-  if (item.name || item.title) {
-    // If the item has a name or title, create a title element
-    const title = document.createElement("h4");
-    title.textContent = item.name || item.title;
-    title.className = "item-title";
-    card.appendChild(title);
-  }
-
-  if (item.rating && item.rating.average) {
-    // If the item has a rating, create a rating element
-    const rating = document.createElement("p");
-    rating.textContent = `Rating: ${item.rating.average}`;
-    rating.className = "item-rating";
-    card.appendChild(rating);
-  }
-  return card;
-};
 /* ------------
 !!! Search !!!
 ------------- */
 // Function to perform the search
-const performSearch = async (query, page = 1, pageSize = 20) => {
+const performSearch = async (query, page = 1, pageSize = 20) => {  // this is very intense on the API, will need to be changed Andre
   if (query.trim() === "") {
     getItems(apiUrl, page, pageSize);
   } else {

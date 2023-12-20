@@ -1,60 +1,76 @@
-const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
+import { createContainer, createItemCard, createSearchElements, displayShowDetails, toggleFavorite, manageFavorites } from "./uiComponents.js";
 
-const getItems = async (url) => {
-  //async function to get the items from the API
-  const response = await fetch(url);
-  const items = await response.json();
-  displayItems(items); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
+const apiUrl = "https://api.tvmaze.com/shows";
+const itemsPerPage = 18; // Number of items to display per page
+
+let currentPage = 1;
+let items = []; // Store items globally
+
+const getItems = async (url, page) => {
+    const response = await fetch(`${url}?page=${page}`);
+    items = await response.json();
+    console.log(items);
+    currentPage = 1; // Update the global items variable
+    displayItems();
 };
 
-const displayItems = (items) => {
-  //function to display the items
-  const container =
-    document.getElementById("items-container") ||
-    createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
-  container.innerHTML = "";
+const displayItems = () => {
+    const container = document.getElementById("items-container") || createContainer("items-container");
+    container.innerHTML = "";
 
-  items.forEach((item) => {
-    const card = createItemCard(item);
-    container.appendChild(card);
-  });
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToDisplay = items.slice(startIndex, endIndex);
+
+    itemsToDisplay.forEach(item => {
+        const card = createItemCard(item);
+        container.appendChild(card);
+    });
+
+    createPagination();
 };
 
-const createContainer = (id) => {
-  //function to create a container with the given id
-  const container = document.createElement("div");
-  container.id = id;
-  document.body.appendChild(container);
-  return container;
+const createPagination = () => { // some error in your function Illakia, must fix, keeping it like it is for now
+    const paginationContainer = document.getElementById("pagination-container") || createContainer("pagination-container");
+    paginationContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+
+  // Previous Button
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.addEventListener("click", () => {
+        if (currentPage > 1) {
+        currentPage--;
+        displayItems();
+    }
+    });
+    paginationContainer.appendChild(prevButton);
+
+  // Next Button
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.addEventListener("click", async () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        displayItems();
+    } else {
+        currentPage++;
+        await getItems(apiUrl, currentPage);
+    }
+});
+paginationContainer.appendChild(nextButton);
 };
 
-const createItemCard = (item) => {
-  //function to create a card for the given item, reusable for other types of items
-  const card = document.createElement("div");
-  card.className = "item-card";
-
-  const image = document.createElement("img"); // Create an image element
-  image.src = item.image ? item.image.medium : "placeholder.jpg";
-  image.alt = item.name || item.title || "Image";
-  image.className = "item-image";
-  card.appendChild(image);
-
-  if (item.name || item.title) {
-    // If the item has a name or title, create a title element
-    const title = document.createElement("h4");
-    title.textContent = item.name || item.title;
-    title.className = "item-title";
-    card.appendChild(title);
-  }
-
-  if (item.rating && item.rating.average) {
-    // If the item has a rating, create a rating element
-    const rating = document.createElement("p");
-    rating.textContent = `Rating: ${item.rating.average}`;
-    rating.className = "item-rating";
-    card.appendChild(rating);
-  }
-  return card;
+window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
+    if (event.state && event.state.show) { // If there's a show in the history state, display it
+            displayShowDetails(event.state.show);
+    } else {
+        const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
+        container.innerHTML = '';
+        getItems(apiUrl,currentPage); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
+    }
 };
 
+createSearchElements();
 getItems(apiUrl, currentPage);
