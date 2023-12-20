@@ -97,3 +97,5 @@ const nextButton = createPaginationButton("Next Page", "nextPage", () => {
 paginationContainer.appendChild(nextButton);
 
 getItems(apiUrl, currentPage, pageSize);
+
+//Merge Test V4
