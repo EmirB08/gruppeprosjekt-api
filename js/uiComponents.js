@@ -1,6 +1,6 @@
 const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
 
-const getItems = async (url) => { //async function to get the items from the API
+const getItems = async (url, page) => { //async function to get the items from the API
     const response = await fetch(url);
     const items = await response.json();
     console.log(items);
@@ -146,5 +146,9 @@ const getTopRatedShows = async () => { // Function to get the top rated shows di
 
     displayItems(topRatedShows);
 };
+
+// Page loading logic //
+
+
 
 export { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
