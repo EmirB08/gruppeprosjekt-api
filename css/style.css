@@ -77,6 +77,12 @@ input {
   border-radius: 5px;
   padding: 2px;
 }
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
 /* ------------
 !!! Items !!!
 --------------- */
