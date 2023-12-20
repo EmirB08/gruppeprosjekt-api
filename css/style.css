@@ -6,7 +6,7 @@
 :root {
   --Background: #262342;
   --Text: #e3e3e3;
-  --Btn-Text: #31e1a5;
+  --Btn-hover: #31e1a5;
 }
 /* ------------
 !!! Style !!!
@@ -42,9 +42,19 @@ nav,
   background: none;
   border: none;
   padding-inline: 10px;
+  margin-top: 20px;
 }
-a {
+a,
+.user {
   text-decoration: none;
+  cursor: pointer;
+}
+/* ------------
+!!! Hover !!!
+--------------- */
+a:hover,
+.user:hover {
+  color: var(--Btn-hover);
 }
 /* ------------
 !!! Header !!!
