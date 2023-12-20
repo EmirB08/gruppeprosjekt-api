@@ -75,4 +75,4 @@ window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON T
 createSearchElements();
 getItems(apiUrl, currentPage);
 
-//Merge Test
+//Merge Test V3
