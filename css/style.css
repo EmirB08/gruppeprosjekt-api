@@ -32,7 +32,11 @@ ul,
 #hero {
   display: flex;
 }
-
+/* ------------
+!!! Buttons !!!
+--------------- */
+button {
+}
 /* ------------
 !!! Header !!!
 --------------- */
@@ -85,4 +89,7 @@ a {
   margin-left: 10px;
   cursor: pointer;
   color: gold;
+}
+.pagination {
+  margin-inline: 10px;
 }

@@ -94,16 +94,20 @@ searchButton.addEventListener("click", () => {
 !!! Paginator !!!
 ------------- */
 let currentPage = 1;
+
 // Function to create pagination buttons
 const createPaginationButton = (text, id, clickHandler) => {
   const button = document.createElement("button");
   button.textContent = text;
   button.id = id;
+  button.classList.add("pagination");
   button.addEventListener("click", clickHandler);
   return button;
 };
+
 // Set the default pageSize
 let pageSize = 20;
+
 // Function to handle pagination
 const handlePagination = () => {
   getItems(apiUrl, currentPage, pageSize);
@@ -128,11 +132,13 @@ const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
     updatePageAndSearch(-1);
   }
 });
+
 paginationContainer.appendChild(prevButton);
 
 const nextButton = createPaginationButton("Next Page", "nextPage", () => {
   updatePageAndSearch(1);
 });
+
 paginationContainer.appendChild(nextButton);
 
 getItems(apiUrl, currentPage, pageSize);
