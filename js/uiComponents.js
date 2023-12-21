@@ -129,28 +129,47 @@ const createItemCard = (item) => { //function to create a card that will display
     return card;
 };
 
-const displayShowDetails = (item) => { // Function to display the show details when clicked, using browser history API to update the URL
+const displayShowDetails = (item) => {
     const container = document.getElementById("items-container");
     container.innerHTML = ''; // Clear existing content
+    container.classList.add('details-view'); //adding a class for viewing
 
-    const title = document.createElement("h2"); // very basic for now, will add more details later and classes for css
+    if (item.image && item.image.original) {
+        const image = document.createElement("img");
+        image.src = item.image.original;
+        image.alt = `Image of ${item.name}`;
+        image.className = 'details-image';
+        container.appendChild(image);
+    }
+
+    const title = document.createElement("h2");
     title.textContent = item.name;
+    title.className = 'details-title';
     container.appendChild(title);
 
     if (item.summary) {
         const summary = document.createElement("p");
         summary.innerHTML = item.summary;
+        summary.className = 'details-summary';
         container.appendChild(summary);
     }
 
     if (item.rating && item.rating.average) {
         const rating = document.createElement("p");
         rating.textContent = `Rating: ${item.rating.average}`;
+        rating.className = 'details-rating';
         container.appendChild(rating);
     }
     
+    if (item.url) {
+        const infoText = document.createElement("p");
+        infoText.innerHTML = `Under construction! Visit: <a href="${item.url}" target="_blank">${item.name}</a> on TVMaze`;
+        infoText.className = "details-tvmaze-link";
+        container.appendChild(infoText);
+    }
     
-    window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
+    
+    window.history.pushState({ show: item }, item.name, `#${item.id}`);
 };
 
 const toggleFavorite = (item, iconElement) => {

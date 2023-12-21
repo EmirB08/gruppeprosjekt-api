@@ -40,6 +40,7 @@ window.onpopstate = (event) => {
     displayShowDetails(event.state.show);
   } else {
     const container = document.getElementById("items-container");
+    container.classList.remove('details-view');
     container.innerHTML = "";
     getSchedule(); //calls the getSchedule function to display the "home page" if there's no show in the history state - will fix this later
   }
