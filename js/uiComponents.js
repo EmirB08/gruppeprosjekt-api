@@ -28,7 +28,8 @@ const displayItems = (items) => {
     container.appendChild(card);
   });
 };
-
+const liSearch = document.getElementById("searchBar");
+console.log(liSearch);
 const createSearchElements = () => {
   //function to create the search elements and search functionality - will change to dual search functionality later
   const searchContainer = document.createElement("div");
@@ -48,7 +49,7 @@ const createSearchElements = () => {
 
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(searchButton);
-  document.body.appendChild(searchContainer); // appending everything
+  liSearch.appendChild(searchContainer); // appending everything
 };
 
 const performSearch = async (query) => {
