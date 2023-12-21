@@ -8,19 +8,22 @@
     <script src="./js/people.js" defer></script>
   </head>
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="shows.html">Shows</a></li>
-          <li><a href="people.html">People</a></li>
-          <li><a href="favorites.html">Favorites</a></li>
-        </ul>
-      </nav>
-    </header>
+    <nav class="navElement">
+      <ul>
+        <li class="nav-menu"><a href="index.html">Home</a></li>
+        <li class="nav-menu"><a href="shows.html">Shows</a></li>
+        <li class="nav-menu"><a href="people.html">People</a></li>
+        <li class="nav-menu"><a href="favorites.html">Favorites</a></li>
+      </ul>
+      <div id="searchBar"></div>
+      <section is="user-comtainer">
+        <button class="pagination-btn">Logg inn</button>
+        <button class="pagination-btn">Sign up</button>
+      </section>
+    </nav>
     <div id="pagination">
       <button id="prev-btn" class="pagination-btn">Previous</button>
       <button id="next-btn" class="pagination-btn">Next</button>
-  </div>
+    </div>
   </body>
 </html>
