@@ -143,11 +143,30 @@ a:hover,
 }
 
 .search-input {
-  width: 20vw;
+  width: 10vw;
+  font: 1.05rem 'Roboto', sans-serif;
   height: 2.5vh;
   border-radius: 5px;
   border: 2px solid var(--Btn-hover);
   background-color: var(--Background);
   color: var(--Btn-hover)
 
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-button {
+  font: 1.05rem 'Roboto', sans-serif;
+  border-radius: 5px;
+  border: 2px solid var(--Btn-hover);
+  background-color: var(--Background);
+  color: var(--Btn-hover);
+  width: 3vw;
+  transition: scale 0.2s ease-in-out;
+}
+
+.search-button:hover {
+  transform: scale(1.05);
 }
