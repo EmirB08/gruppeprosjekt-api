@@ -46,6 +46,7 @@ ul {
 
 #items-container {
   margin: auto;
+  position: relative;
   width: 65%;
   padding-top: 2%;
   display: grid;
@@ -97,14 +98,41 @@ ul {
 }
 
 .search-button,
-.pagination-btn {
+.pagination-btn,
+.user {
   color: var(--Text);
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
+  transition: transform 0.25s ease-in-out;
 }
 
 .item-rating {
+  color: var(--Btn-hover);
+}
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin-top: 2%;
+
+}
+
+a,
+.user,
+.search-button,
+.pagination-btn {
+  margin: auto;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 1s color;
+}
+
+a:hover,
+.user:hover,
+.pagination-btn:hover {
   color: var(--Btn-hover);
 }

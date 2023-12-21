@@ -49,6 +49,8 @@ const createContainer = (id) => { // utility function to create a container with
 
 const displayItems = (items) => { //function to display the items
     const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
+    const paginationElement = document.getElementById("pagination");
+    document.body.insertBefore(container, paginationElement);
     container.innerHTML = "";
 
     items.forEach(item => {
