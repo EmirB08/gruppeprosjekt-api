@@ -1,7 +1,7 @@
 import { getItems, displayItems, createPages, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
 
 const peopleAPI = 'https://api.tvmaze.com/people';
-createPages(peopleAPI);
+
 
 const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
   const searchContainer = document.createElement("div");
@@ -30,4 +30,15 @@ const performSearch = async (query) => { //takes in the query from the search in
   window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
 };
 
+window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
+  if (event.state && event.state.content) { // If there's a show in the history state, display it
+          displayShowDetails(event.state.content);
+  } else {
+      const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
+      container.innerHTML = '';
+      createPages(peopleAPI); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
+  }
+};
+
+createPages(peopleAPI);
 createSearchElements();
