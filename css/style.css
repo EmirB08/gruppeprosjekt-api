@@ -1,6 +1,3 @@
-/* ------------
-!!! General !!!
---------------- */
 * {
   margin: 0;
   padding: 0;
@@ -77,15 +74,37 @@ ul {
   width: 175px;
   height: 240px;
   border-radius: 2%;
+  transition: transform 0.25s ease-in-out;
+}
+
+.item-image:hover {
+  transform: scale(1.1);
 }
 
 .item-title {
+  margin-top: 5px;
   color: var(--Text);
 }
 
 .item-card {
+  display: block;
   width: 175px;
   min-height: 240px;
   position: relative;
+  overflow: hidden;
+  cursor: pointer;
 
+}
+
+.search-button,
+.pagination-btn {
+  color: var(--Text);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.item-rating {
+  color: var(--Btn-hover);
 }
