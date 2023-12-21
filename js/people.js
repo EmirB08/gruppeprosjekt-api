@@ -4,7 +4,7 @@ const peopleAPI = 'https://api.tvmaze.com/people';
 
 const liSearch = document.getElementById("searchBar");
 console.log(liSearch);
-const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
+const createSearchElements = () => { //function to create the search elements and search functionality
   const searchContainer = document.createElement("div");
   searchContainer.className = "search-container";
 
@@ -18,7 +18,7 @@ const createSearchElements = () => { //function to create the search elements an
   const searchButton = document.createElement("button");
   searchButton.textContent = "Search";
   searchButton.className = "search-button";
-  searchButton.addEventListener("click", () => performSearch(searchInput.value)); // will include enter key functionality later
+  searchButton.addEventListener("click", () => performSearch(searchInput.value));
 
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(searchButton);
