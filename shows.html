@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>people</title>
     <link href="./css/style.css" rel="stylesheet" />
     <link
       rel="stylesheet"
@@ -12,17 +12,19 @@
     <script type="module" src="./js/shows.js" defer></script>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li class="nav-menu"><a href="index.html">Home</a></li>
-        <li class="nav-menu"><a href="shows.html">Shows</a></li>
-        <li class="nav-menu"><a href="people.html">People</a></li>
-        <li class="nav-menu"><a href="favorites.html">Favorites</a></li>
-      </ul>
-      <section>
-        <button class="user">Logg inn</button>
-        <button class="user">Sign up</button>
-      </section>
-    </nav>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shows.html">Shows</a></li>
+          <li><a href="people.html">People</a></li>
+          <li><a href="favorites.html">Favorites</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div id="pagination">
+      <button id="prev-btn" class="pagination-btn">Previous</button>
+      <button id="next-btn" class="pagination-btn">Next</button>
+    </div>
   </body>
 </html>

@@ -1,11 +1,51 @@
-const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
+let currentPage = 0; //initial state parameters for the page
+const itemsPerPage = 18;
+let totalPages = 0;
+let apiPage = 0;
+const totalArray = [];
 
-const getItems = async (url) => {
-  //async function to get the items from the API
-  const response = await fetch(url);
-  const items = await response.json();
-  console.log(items);
-  displayItems(items); //calling the displayItems function to display the items
+const createPages = (url) => {
+  //function to create the pages and pagination with buttons
+  document.getElementById("prev-btn").addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      displayPageItems();
+    }
+  });
+  document.getElementById("next-btn").addEventListener("click", () => {
+    currentPage++;
+    displayPageItems();
+    if (
+      currentPage * itemsPerPage >= totalArray.length &&
+      currentPage >= totalPages - 1
+    ) {
+      getItems(url, apiPage);
+    }
+  });
+  getItems(url, apiPage); //initial call to getItems
+};
+
+const getItems = async (url, page) => {
+  const response = await fetch(`${url}?page=${page}`);
+  const data = await response.json();
+  console.log(data);
+  if (data.length === 0) {
+    return;
+  }
+  totalArray.push(...data); // Append new data to the total array
+  totalPages = Math.ceil(totalArray.length / itemsPerPage);
+  displayPageItems();
+  apiPage++; // increment by 1
+};
+
+const displayPageItems = () => {
+  //function to display the items on the page
+  const startIndex = currentPage * itemsPerPage;
+  const itemsToDisplay = totalArray.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+  displayItems(itemsToDisplay);
 };
 
 const createContainer = (id) => {
@@ -178,7 +218,12 @@ const getTopRatedShows = async () => {
   displayItems(topRatedShows);
 };
 
+// Page loading logic //
+
 export {
+  getItems,
+  currentPage,
+  createPages,
   createContainer,
   displayItems,
   createSearchElements,
