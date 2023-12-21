@@ -13,31 +13,27 @@
 }
 /* flex */
 body,
-.page-comtainer,
+.nav-container,
 ul,
 nav {
   display: flex;
 }
-body,
-.page-comtainer {
-  align-items: center;
-  margin: auto;
-}
-.page-comtainer {
-  width: 99%;
-}
+
 /* ------------
 !!! Style !!!
 --------------- */
 body {
-  max-width: 1024px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
   background-color: var(--Background);
   color: var(--Text);
   flex-direction: column;
 }
 ul,
 #searchBar,
-.page-comtainer {
+.nav-container {
   margin-inline: 20px;
 }
 
@@ -132,4 +128,11 @@ input {
   margin-left: 10px;
   cursor: pointer;
   color: gold;
+}
+
+.nav-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  align-content: center;
 }
