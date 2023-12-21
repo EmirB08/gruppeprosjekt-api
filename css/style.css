@@ -77,6 +77,11 @@ a,
 .search-button {
   direction: none;
 }
+#pagination {
+  margin-bottom: 50px;
+  position: absolute;
+  bottom: 0;
+}
 /* ------------
 !!! Hover !!!
 --------------- */
