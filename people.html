@@ -5,40 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>people</title>
     <link href="./css/style.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <script type="module" src="./js/people.js" defer></script>
+    <script src="./js/people.js" defer></script>
   </head>
   <body>
     <header>
       <nav>
         <ul>
-          <li class="nav-menu"><a href="index.html">Home</a></li>
-          <li class="nav-menu"><a href="shows.html">Shows</a></li>
-          <li class="nav-menu"><a href="people.html">People</a></li>
-          <li class="nav-menu"><a href="favorites.html">Favorites</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shows.html">Shows</a></li>
+          <li><a href="people.html">People</a></li>
+          <li><a href="favorites.html">Favorites</a></li>
         </ul>
-        <!-- search -->
-        <div id="searchBar"></div>
-        <!--         <section>
-          <input
-            id="search-btn"
-            type="search"
-            placeholder="Search..."
-            data-search
-          />
-          <button id="Search">
-            <img src="./icon/search.png" alt="magnifying glass" />
-          </button>
-        </section> -->
-        <!-- user -->
-        <section>
-          <button class="user">Logg inn</button>
-          <button class="user">Sign up</button>
-        </section>
       </nav>
     </header>
+    <section id="hero">
+      <h1>Welcome</h1>
+      <p>lorem ipsum</p>
+      <label for="search-btn">Search for people</label>
+      <section>
+        <input
+          id="search-btn"
+          type="search"
+          placeholder="Search..."
+          data-search
+        />
+        <button id="Search">
+          <img src="./icon/search.png" alt="magnifying glass" />
+        </button>
+      </section>
+    </section>
   </body>
 </html>
