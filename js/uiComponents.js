@@ -1,19 +1,43 @@
-let currentPage = 0;
-const itemsPerPage = 100;
-const totalArray = [];   // Array to hold all fetched data
-let totalPages = 0;   // Define itemsPerPage
+let currentPage = 0; //initial state parameters for the page
+const itemsPerPage = 18;
+let totalPages = 0;
+let apiPage = 0;
+const totalArray = [];
 
-const createPages = (url) => {
-    document.getElementById('prev-btn').addEventListener('click', () => currentPage > 1 && getItems(url, --currentPage));
-    document.getElementById('next-btn').addEventListener('click', () => getItems(url, ++currentPage));
-    getItems(url, currentPage);
+const createPages = (url) => { //function to create the pages and pagination with buttons
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            displayPageItems();
+        }
+    });
+    document.getElementById('next-btn').addEventListener('click', () => {
+        currentPage++;
+        displayPageItems();
+        if (currentPage * itemsPerPage >= totalArray.length && currentPage >= totalPages - 1) {
+            getItems(url, apiPage);
+        }
+    });
+    getItems(url, apiPage); //initial call to getItems
 };
 
 const getItems = async (url, page) => {
     const response = await fetch(`${url}?page=${page}`);
     const data = await response.json();
     console.log(data);
-    displayItems(data.slice(0, itemsPerPage));
+    if (data.length === 0) { 
+        return; 
+    }
+    totalArray.push(...data); // Append new data to the total array
+    totalPages = Math.ceil(totalArray.length / itemsPerPage);
+    displayPageItems();
+    apiPage++; // increment by 1
+};
+
+const displayPageItems = () => { //function to display the items on the page
+    const startIndex = currentPage * itemsPerPage;
+    const itemsToDisplay = totalArray.slice(startIndex, startIndex + itemsPerPage);
+    displayItems(itemsToDisplay);
 };
 
 const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
