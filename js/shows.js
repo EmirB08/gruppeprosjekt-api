@@ -1,6 +1,7 @@
 import { getItems, displayItems, createPages, createSearchElements, performSearch, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
 
 const showsAPI = 'https://api.tvmaze.com/shows';
+console.log(showsAPI);
 
 window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
   if (event.state && event.state.content) { // If there's a show in the history state, display it

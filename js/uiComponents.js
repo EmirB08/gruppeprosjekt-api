@@ -22,7 +22,7 @@ const createPages = (url) => { //function to create the pages and pagination wit
 };
 
 const getItems = async (url, page) => {
-    const response = await fetch(`${url}?page=${page}`);
+    const response = await fetch(`${url}?page=${page}`); // unfortunately the API doesnt support embedding on the index endpoint - sad
     const data = await response.json();
     console.log(data);
     if (data.length === 0) { 
@@ -80,7 +80,7 @@ const createSearchElements = () => { //function to create the search elements an
 };
 
 const performSearch = async (query) => { //takes in the query from the search input 
-    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API search endpoint
+    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}&embed=cast`); //using the query to search the API search endpoint
     const searchResults = await response.json();
     console.log(searchResults); //
     displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
@@ -146,6 +146,7 @@ const displayShowDetails = (item) => { // Function to display the show details w
         rating.textContent = `Rating: ${item.rating.average}`;
         container.appendChild(rating);
     }
+    
     
     window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
 };
