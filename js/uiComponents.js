@@ -102,7 +102,7 @@ const createItemCard = (item) => { //function to create a card that will display
     card.appendChild(titleContainer); // append the title container to the main
 
     if (item.name || item.title) { //resusability between shows/people/movies
-        const title = document.createElement("h4");
+        const title = document.createElement("p");
         title.textContent = item.name || item.title;
         title.className = "item-title";
         titleContainer.appendChild(title);
@@ -114,7 +114,7 @@ const createItemCard = (item) => { //function to create a card that will display
         e.stopPropagation();
         toggleFavorite(item, favoriteIcon);
     };
-    titleContainer.appendChild(favoriteIcon);
+    card.appendChild(favoriteIcon);
 
     if (item.rating && item.rating.average) { // Create a rating element if the item has a rating
         const rating = document.createElement("p");
