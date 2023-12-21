@@ -18,13 +18,15 @@ body {
   color: var(--Text);
 }
 /* text sise */
-h1 {
-  font-size: 50px;
+button,
+li {
+  font-size: 20px;
 }
 /* Text color */
 body,
 a,
-.user {
+.user,
+.search-button {
   color: var(--Text);
 }
 /* flex */
@@ -38,17 +40,22 @@ nav,
 !!! Button !!!
 --------------- */
 .nav-menu,
-.user {
+.user,
+.search-button {
   background: none;
   border: none;
   padding-inline: 10px;
   margin-top: 20px;
 }
 a,
-.user {
+.user,
+.search-button {
   text-decoration: none;
   cursor: pointer;
   transition: 1s color;
+}
+.search-button {
+  direction: none;
 }
 /* ------------
 !!! Hover !!!
@@ -63,9 +70,9 @@ a:hover,
 header,
 ul,
 nav,
-user {
+.user {
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   list-style: none;
 }
@@ -73,9 +80,16 @@ user {
 header {
   display: block;
 }
+ul {
+  margin-left: 20px;
+}
 input {
   border-radius: 5px;
   padding: 2px;
+  border: none;
+}
+#user-comtainer {
+  margin-right: 20px;
 }
 /* ------------
 !!! Items !!!
