@@ -2,11 +2,14 @@ import { getItems, displayItems, createPages, createContainer, createItemCard, d
 
 const peopleAPI = 'https://api.tvmaze.com/people';
 
-
+const liSearch = document.getElementById("searchBar");
+console.log(liSearch);
 const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
   const searchContainer = document.createElement("div");
   searchContainer.className = "search-container";
 
+  const liSearch = document.getElementById("searchBar");
+ console.log(liSearch);
   const searchInput = document.createElement("input");
   searchInput.id = "searchInput";
   searchInput.placeholder = "Search People";
@@ -19,7 +22,7 @@ const createSearchElements = () => { //function to create the search elements an
 
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(searchButton);
-  document.body.appendChild(searchContainer); // appending everything
+  liSearch.appendChild(searchContainer); // appending everything
 };
 
 const performSearch = async (query) => { //takes in the query from the search input 
