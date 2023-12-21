@@ -1,3 +1,6 @@
+/* ------------
+!!! General !!!
+--------------- */
 * {
   margin: 0;
   padding: 0;
@@ -8,15 +11,36 @@
   --Text: #e3e3e3;
   --Btn-hover: #31e1a5;
 }
+/* flex */
+body,
+.page-comtainer,
+ul,
+nav {
+  display: flex;
+}
+body,
+.page-comtainer {
+  align-items: center;
+  margin: auto;
+}
+.page-comtainer {
+  width: 99%;
+}
 /* ------------
 !!! Style !!!
 --------------- */
 body {
-  height: 100vh;
-  width: 100vw;
+  max-width: 1024px;
   background-color: var(--Background);
   color: var(--Text);
+  flex-direction: column;
 }
+ul,
+#searchBar,
+.page-comtainer {
+  margin-inline: 20px;
+}
+
 /* text sise */
 button,
 li {
@@ -26,22 +50,17 @@ li {
 body,
 a,
 .user,
-.search-button {
+.search-button,
+.pagination-btn {
   color: var(--Text);
-}
-/* flex */
-header,
-ul,
-nav,
-#hero {
-  display: flex;
 }
 /* ------------
 !!! Button !!!
 --------------- */
 .nav-menu,
 .user,
-.search-button {
+.search-button,
+.pagination-btn {
   background: none;
   border: none;
   padding-inline: 10px;
@@ -49,7 +68,8 @@ nav,
 }
 a,
 .user,
-.search-button {
+.search-button,
+.pagination-btn {
   text-decoration: none;
   cursor: pointer;
   transition: 1s color;
@@ -57,11 +77,17 @@ a,
 .search-button {
   direction: none;
 }
+#pagination {
+  margin-bottom: 50px;
+  position: absolute;
+  bottom: 0;
+}
 /* ------------
 !!! Hover !!!
 --------------- */
 a:hover,
-.user:hover {
+.user:hover,
+.pagination-btn:hover {
   color: var(--Btn-hover);
 }
 /* ------------
@@ -72,29 +98,20 @@ ul,
 nav,
 .user {
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   list-style: none;
-}
-
-header {
-  display: block;
-}
-ul {
-  margin-left: 20px;
 }
 input {
   border-radius: 5px;
   padding: 2px;
   border: none;
 }
-#user-comtainer {
-  margin-right: 20px;
-}
 /* ------------
 !!! Items !!!
 --------------- */
 #items-container {
+  max-width: 100%;
   padding-top: 100px;
   padding-left: 50px;
   padding-right: 50px;
