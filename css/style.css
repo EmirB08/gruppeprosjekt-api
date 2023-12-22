@@ -67,9 +67,9 @@ a, .search-button, .btn {
 
 .welcome {
   display: flex;
-  margin-top: 30px;  
+  margin-top: 15px;  
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: var(--Btn-hover);
 }
@@ -83,7 +83,7 @@ a, .search-button, .btn {
 
 .item-image {
   width: 175px;
-  height: 240px;
+  height: 220px;
   border-radius: 2%;
   transition: transform 0.25s ease-in-out;
 }
@@ -100,7 +100,7 @@ a, .search-button, .btn {
 .item-card {
   display: block;
   width: 175px;
-  min-height: 240px;
+  min-height: 220px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -175,7 +175,6 @@ a:hover,
 .search-button {
   font: 1.05rem 'Roboto', sans-serif;
   border-radius: 5px;
-  border: 2px solid var(--Btn-hover);
   background-color: var(--Background);
   color: var(--Btn-hover);
   width: 3vw;
