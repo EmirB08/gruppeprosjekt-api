@@ -67,7 +67,7 @@ const createSearchElements = () => { //function to create the search elements an
 
     const searchInput = document.createElement("input");
     searchInput.id = "searchInput";
-    searchInput.placeholder = "Search Shows";
+    searchInput.placeholder = "  Search Shows";
     searchInput.className = "search-input";
 
     const searchButton = document.createElement("button");
@@ -163,7 +163,7 @@ const displayShowDetails = (item) => {
     
     if (item.url) {
         const infoText = document.createElement("p");
-        infoText.innerHTML = `Under construction! Visit: <a href="${item.url}" target="_blank">${item.name}</a> on TVMaze`;
+        infoText.innerHTML = `Under Construction! <span><a href="${item.url}" target="_blank">Click here to view ${item.name} on TVMaze for now!</a></span>`;
         infoText.className = "details-tvmaze-link";
         container.appendChild(infoText);
     }

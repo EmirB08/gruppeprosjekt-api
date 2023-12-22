@@ -64,6 +64,16 @@ a, .search-button, .btn {
   align-items: center;
 }
 
+
+.welcome {
+  display: flex;
+  margin-top: 30px;  
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--Btn-hover);
+}
+
 .favorite-icon {
   cursor: pointer;
   color: gold;
@@ -95,6 +105,11 @@ a, .search-button, .btn {
   overflow: hidden;
   cursor: pointer;
 
+}
+
+.user-container {
+  display: flex;
+  gap: 1vw;
 }
 
 .search-button,
@@ -226,7 +241,12 @@ a:hover,
 .details-tvmaze-link {
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    color: var(--Btn-hover)
+    color: var(--Btn-hover);
+}
+
+span {
+  font-size: 1.2rem;
+  text-decoration: underline;
 }
 
 /* Media queries under construction! */
