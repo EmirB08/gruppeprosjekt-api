@@ -5,9 +5,9 @@
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 :root {
-  --Background: #262342;
+  --Background: #1B1E2B;
   --Text: #e3e3e3;
-  --Btn-hover: #31e1a5;
+  --Btn-hover: #03c685;
 }
 
 body {
@@ -24,14 +24,21 @@ a, .search-button, .btn {
   cursor: pointer;
 }
 
+.main-container {
+  max-width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 .nav-container {
-  padding-top: 1%;
-  margin: auto;
-  width: 65%; 
+  min-width: 100%;
   display: flex;
   flex-direction: row; 
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
   overflow: hidden;
 }
 
@@ -46,12 +53,12 @@ a, .search-button, .btn {
 
 #items-container {
   margin: auto;
+  width: 100%;
   position: relative;
-  width: 65%;
   padding-top: 2%;
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto;
-  gap: 2vw;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 1vw;
   justify-content: center;
   align-items: center;
   align-content: center;

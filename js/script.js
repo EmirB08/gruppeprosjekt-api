@@ -8,6 +8,7 @@ import {
   toggleFavorite,
   manageFavorites,
 } from "./uiComponents.js";
+
 const fetchAndDisplayShows = async (showIds) => {
   //changed to display top rated shows from today's schedule, topRatedShows is now scheduled shows
   const showsPromises = showIds.map((id) =>
