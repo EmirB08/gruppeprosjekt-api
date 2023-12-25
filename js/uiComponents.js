@@ -4,6 +4,20 @@ let totalPages = 0;
 let apiPage = 0;
 const totalArray = [];
 
+function createElement(tagName, attributes = {}, listeners = {}) {
+    const element = document.createElement(tagName);
+
+    Object.entries(attributes).forEach(([attr, value]) => {
+    element[attr] = value;
+});
+    Object.entries(listeners).forEach(([event, handler]) => {
+    element.addEventListener(event, handler);
+});
+
+return element;
+}
+
+
 const createPages = (url) => { //function to create the pages and pagination with buttons
     document.getElementById('prev-btn').addEventListener('click', () => {
         if (currentPage > 0) {
@@ -47,11 +61,18 @@ const createContainer = (id) => { // utility function to create a container with
     return container;
 };
 
-const displayItems = (items) => { //function to display the items
-    const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
-    const paginationElement = document.getElementById("pagination");
-    document.body.insertBefore(container, paginationElement);
-    container.innerHTML = "";
+const displayItems = (items) => {
+    let container = document.getElementById("items-container");
+    if (!container) {
+        container = createContainer("items-container");
+    }
+
+    const mainContainer = document.querySelector(".main-container");
+    if (!mainContainer.contains(container)) {
+        mainContainer.appendChild(container);
+    }
+
+    container.innerHTML = "";  // Clear existing content
 
     items.forEach(item => {
         const card = createItemCard(item);
@@ -89,7 +110,7 @@ const performSearch = async (query) => { //takes in the query from the search in
     window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
 };
 
-const createItemCard = (item) => { //function to create a card that will display the item and the necessary data elements
+const createItemCard = (item) => { // function to create the item cards,creates an array for the elements and appends them to the card
     const card = document.createElement("div");
     card.className = "item-card";
 
@@ -129,48 +150,38 @@ const createItemCard = (item) => { //function to create a card that will display
     return card;
 };
 
-const displayShowDetails = (item) => {
+const displayShowDetails = (item) => { // functon to display the show details, now creates an array for the elements and appends them to the container to reduce code instead of appending each element individually
     const container = document.getElementById("items-container");
-    container.innerHTML = ''; // Clear existing content
-    container.classList.add('details-view'); //adding a class for viewing
+    container.innerHTML = '';
+    container.classList.add('details-view');
 
-    if (item.image && item.image.original) {
-        const image = document.createElement("img");
-        image.src = item.image.original;
-        image.alt = `Image of ${item.name}`;
-        image.className = 'details-image';
-        container.appendChild(image);
-    }
+    [
+        item.image && item.image.original && createElement("img", {
+            src: item.image.original,
+            alt: `Image of ${item.name}`,
+            className: 'details-image'
+        }),
+        createElement("h2", {
+            textContent: item.name,
+            className: 'details-title'
+        }),
+        item.summary && createElement("p", {
+            innerHTML: item.summary,
+            className: 'details-summary'
+        }),
+        item.rating?.average && createElement("p", {
+            textContent: `Rating: ${item.rating.average}`,
+            className: 'details-rating'
+        }),
+        item.url && createElement("p", {
+            innerHTML: `Under Construction! <span><a href="${item.url}" target="_blank">Click here to view ${item.name} on TVMaze for now!</a></span>`,
+            className: "details-tvmaze-link"
+        })
+    ].forEach(element => element && container.appendChild(element));
 
-    const title = document.createElement("h2");
-    title.textContent = item.name;
-    title.className = 'details-title';
-    container.appendChild(title);
-
-    if (item.summary) {
-        const summary = document.createElement("p");
-        summary.innerHTML = item.summary;
-        summary.className = 'details-summary';
-        container.appendChild(summary);
-    }
-
-    if (item.rating && item.rating.average) {
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        rating.className = 'details-rating';
-        container.appendChild(rating);
-    }
-    
-    if (item.url) {
-        const infoText = document.createElement("p");
-        infoText.innerHTML = `Under Construction! <span><a href="${item.url}" target="_blank">Click here to view ${item.name} on TVMaze for now!</a></span>`;
-        infoText.className = "details-tvmaze-link";
-        container.appendChild(infoText);
-    }
-    
-    
     window.history.pushState({ show: item }, item.name, `#${item.id}`);
 };
+
 
 const toggleFavorite = (item, iconElement) => {
     const isFavorited = manageFavorites(item.id);
