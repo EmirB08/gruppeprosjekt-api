@@ -59,8 +59,8 @@ const createItemCard = (item) => {
             className: `fa-star favorite-icon ${isFavorited ? "fas" : "far"}`,
             onclick: (e) => { e.stopPropagation(); toggleFavorite(item, e.target); }
         }),
-        item.rating?.average && createElement("p", {
-            textContent: `Rating: ${item.rating.average}`,
+        item.rating && createElement("p", {
+            textContent: item.rating?.average !== null ? `Rating: ${item.rating.average}` : 'Not rated',
             className: "item-rating"
         })
     ];
