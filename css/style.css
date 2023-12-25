@@ -7,7 +7,7 @@
 :root {
   --Background: #1B1E2B;
   --Text: #e3e3e3;
-  --Btn-hover: #03c685;
+  --Btn-hover: #2ddfa4;
 }
 
 body {
@@ -35,11 +35,11 @@ a, .search-button, .btn {
 }
 
 .nav-container {
-  width: 100%;
   display: flex;
-  flex-direction: row; 
   justify-content: space-between;
-  overflow: hidden;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
 }
 
 .nav-container ul {
@@ -52,7 +52,6 @@ a, .search-button, .btn {
 }
 
 #items-container {
-  margin: auto;
   width: 100%;
   position: relative;
   padding-top: 2%;
@@ -71,14 +70,15 @@ a, .search-button, .btn {
   align-items: center;
 }
 
-
 .welcome {
-  display: flex;
-  margin-top: 15px;  
-  justify-content: center;
-  font-size: 1.1rem;
+  display: block;
+  align-self: flex-start;
+  text-align: left;
+  margin-top: 15px;
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--Btn-hover);
+  width: 100%;
 }
 
 .favorite-icon {
@@ -114,14 +114,7 @@ a, .search-button, .btn {
 
 }
 
-.user-container {
-  display: flex;
-  gap: 1vw;
-}
-
-.search-button,
-.pagination-btn,
-.user {
+.search-button, .pagination-btn, .user {
   color: var(--Text);
   background: none;
   border: none;
@@ -135,12 +128,9 @@ a, .search-button, .btn {
 }
 
 #pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  margin-top: 2%;
-
+  margin-top: 20px;
+  display: block;
+  text-align: center;
 }
 
 a,
@@ -159,15 +149,10 @@ a:hover,
   color: var(--Btn-hover);
 }
 
-.search-container {
-  display: flex;
-  gap: 0.5vw;
-}
-
 .search-input {
-  width: 10vw;
+  width: 20vw;
   font: 1.05rem 'Roboto', sans-serif;
-  height: 2.5vh;
+  height: 4.5vh;
   border-radius: 5px;
   border: 2px solid var(--Btn-hover);
   background-color: var(--Background);

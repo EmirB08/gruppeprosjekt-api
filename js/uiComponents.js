@@ -1,5 +1,5 @@
 let currentPage = 0; //initial state parameters for the page
-const itemsPerPage = 18;
+const itemsPerPage = 12;
 let totalPages = 0;
 let apiPage = 0;
 const totalArray = [];
@@ -77,7 +77,7 @@ const createSearchElements = () => {
     const searchContainer = createElement("div", { className: "search-container" });
     const searchInput = createElement("input", {
         id: "searchInput",
-        placeholder: "Search Shows",
+        placeholder: "  Search...",
         className: "search-input"
     });
     const searchButton = createElement("button", {
