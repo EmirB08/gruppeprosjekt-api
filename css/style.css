@@ -14,11 +14,11 @@ body {
   background-color: var(--Background);
   color: var(--Text);
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
-a, .search-button, .btn {
+a, .search-button {
   color: var(--Text);
   text-decoration: none;
   cursor: pointer;
@@ -56,8 +56,8 @@ a, .search-button, .btn {
   position: relative;
   padding-top: 2%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-  gap: 1vw;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 0.7vw;
   justify-content: center;
   align-items: center;
   align-content: center;
@@ -114,11 +114,10 @@ a, .search-button, .btn {
 
 }
 
-.search-button, .pagination-btn, .user {
+.search-button, .pagination-btn {
   color: var(--Text);
   background: none;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
   transition: transform 0.25s ease-in-out;
 }
@@ -133,19 +132,15 @@ a, .search-button, .btn {
   text-align: center;
 }
 
-a,
-.user,
-.search-button,
-.pagination-btn {
-  margin: auto;
+a, .search-button, .pagination-btn {
+  color: var(--Text);
+  font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
   transition: 1s color;
 }
 
-a:hover,
-.user:hover,
-.pagination-btn:hover {
+a:hover, .user:hover, .pagination-btn:hover {
   color: var(--Btn-hover);
 }
 
@@ -165,11 +160,9 @@ a:hover,
 }
 
 .search-button {
-  font: 1.05rem 'Roboto', sans-serif;
   border-radius: 5px;
   background-color: var(--Background);
   color: var(--Btn-hover);
-  width: 3vw;
   transition: scale 0.2s ease-in-out;
 }
 
@@ -238,6 +231,12 @@ a:hover,
 span {
   font-size: 1.2rem;
   text-decoration: underline;
+}
+
+.search-container {
+  margin-top: 10px;
+  display: flex;
+  gap: 0.7vw;
 }
 
 /* Media queries under construction! */
