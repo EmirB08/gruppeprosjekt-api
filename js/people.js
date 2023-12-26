@@ -1,102 +1,46 @@
-import {createContainer, createItemCard, displayShowDetails, createSearchElements, toggleFavorite, manageFavorites } from './uiComponents.js';
+import { getItems, displayItems, createPages, createElement, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
 
-const apiUrl = "https://api.tvmaze.com/people"; // Im just using the people API, you replace this with whatever you are working on
-const getItems = async (url, page = 1, pageSize = 20) => {
-  const response = await fetch(`${url}?page=${page}&size=${pageSize}`);
-  const items = await response.json();
-  console.log(items);
-  displayItems(items, page, pageSize); // I'm calling the  array of items 'items' instead of 'shows' because the API can return other types of items like movies depending on the URL
-};
+const peopleAPI = 'https://api.tvmaze.com/people';
 
-const displayItems = (items, page, pageSize) => {
-  //function to display the items
-  const container =
-    document.getElementById("items-container") ||
-    createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
-  container.innerHTML = "";
+const createSearchElements = () => {
+  const navbar = document.querySelector(".nav-container");
+  const insertBeforeElement = navbar.querySelector(".user-container");
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const itemsToShow = items.slice(startIndex, endIndex);
-  items.forEach((item) => {
-    const card = createItemCard(item);
-    container.appendChild(card);
+  const searchContainer = createElement("div", { className: "search-container" });
+  const searchInput = createElement("input", {
+      id: "searchInput",
+      placeholder: "  Search...",
+      className: "search-input"
   });
+  const searchButton = createElement("button", {
+      className: "search-button",
+      textContent: "Search",
+      onclick: () => performSearch(searchInput.value)
+  });
+
+  searchContainer.appendChild(searchInput);
+  searchContainer.appendChild(searchButton);
+  navbar.insertBefore(searchContainer, insertBeforeElement);
 };
 
-/* ------------
-!!! Search !!!
-------------- */
-// Function to perform the search
-const performSearch = async (query, page = 1, pageSize = 20) => {  // this is very intense on the API, will need to be changed Andre
-  if (query.trim() === "") {
-    getItems(apiUrl, page, pageSize);
+const performSearch = async (query) => { //takes in the query from the search input 
+  const response = await fetch(`https://api.tvmaze.com/search/people?q=${query}`); //using the query to search the API search endpoint
+  const searchResults = await response.json();
+  console.log(searchResults); //
+  displayItems(searchResults.map(result => result.person)); //array map the search result, very similar to the displayItems function here
+  window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
+};
+
+window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
+  if (event.state && event.state.content) { // If there's a show in the history state, display it
+          displayShowDetails(event.state.content);
   } else {
-    const response = await fetch(
-      `https://api.tvmaze.com/search/people?q=${query}&page=${page}&size=${pageSize}`
-    );
-    const searchResults = await response.json();
-    displayItems(
-      searchResults.map((result) => result.person),
-      page,
-      pageSize
-    );
+      const container = document.getElementById("items-container"); //clear the cointainer and 
+      container.classList.remove('details-view');
+      container.innerHTML = '';
+      createPages(peopleAPI); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
   }
 };
-// Event listener for the search input
-const searchInput = document.querySelector("[data-search]");
-searchInput.addEventListener("input", (e) => {
-  const value = e.target.value.toLowerCase();
-  performSearch(value);
-});
-// Event listener for the search button
-const searchButton = document.getElementById("Search");
-searchButton.addEventListener("click", () => {
-  const searchValue = searchInput.value.toLowerCase();
-  performSearch(searchValue);
-});
-/* ------------
-!!! Paginator !!!
-------------- */
-let currentPage = 1;
-// Function to create pagination buttons
-const createPaginationButton = (text, id, clickHandler) => {
-  const button = document.createElement("button");
-  button.textContent = text;
-  button.id = id;
-  button.addEventListener("click", clickHandler);
-  return button;
-};
-// Set the default pageSize
-let pageSize = 20;
-// Function to handle pagination
-const handlePagination = (pageSize) => {
-  performSearch(searchInput.value.toLowerCase(), pageSize);
-};
 
-// Function to update current page and perform search
-const updatePageAndSearch = (increment) => {
-  currentPage += increment;
-  handlePagination();
-  console.log(currentPage);
-};
-
-const paginationContainer = document.createElement("div");
-paginationContainer.id = "pagination";
-document.body.appendChild(paginationContainer);
-
-const prevButton = createPaginationButton("Previous Page", "prevPage", () => {
-  if (currentPage > 1) {
-    updatePageAndSearch(-1);
-  }
-});
-paginationContainer.appendChild(prevButton);
-
-const nextButton = createPaginationButton("Next Page", "nextPage", () => {
-  updatePageAndSearch(1);
-});
-paginationContainer.appendChild(nextButton);
-
-getItems(apiUrl, currentPage, pageSize);
-
-//Merge Test V4
+createPages(peopleAPI);
+createSearchElements();

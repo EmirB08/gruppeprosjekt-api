@@ -1,117 +1,176 @@
-const apiUrl = "https://api.tvmaze.com/shows"; // Im just using the people API, you replace this with whatever you are working on
+let currentPage = 0; // initial global state parameters for the pages
+const itemsPerPage = 12;
+let totalPages = 0;
+let apiPage = 0;
+const totalArray = [];
 
-const getItems = async (url) => { //async function to get the items from the API
-    const response = await fetch(url);
-    const items = await response.json();
-    console.log(items);
-    displayItems(items); //calling the displayItems function to display the items
+const createElement = (tagName, attributes = {}, listeners = {}, children = []) => { // Creates a DOM element with specified parameters - reusable function
+    const element = document.createElement(tagName);
+    Object.entries(attributes).forEach(([attr, value]) => element[attr] = value);
+    Object.entries(listeners).forEach(([event, handler]) => element.addEventListener(event, handler));
+    children.forEach(child => child instanceof HTMLElement && element.appendChild(child));
+    return element;
 };
 
-const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
+const createContainer = (id) => { // creates a DOM container with specified id only - reusable function
     const container = document.createElement("div");
     container.id = id;
     document.body.appendChild(container);
     return container;
 };
 
-const displayItems = (items) => { //function to display the items
-    const container = document.getElementById("items-container") || createContainer("items-container"); // container to display the items, if it doesn't exist create it using the createContainer function
-    container.innerHTML = "";
+const displayItems = (items) => { // function to display the items on the page
+    let container = document.getElementById("items-container");
+    if (!container) {
+        container = createContainer("items-container");
+    }
 
-    items.forEach(item => {
+    const mainContainer = document.querySelector(".main-container"); // retrofitted to work with the new HTML structure that was fixed
+    if (!mainContainer.contains(container)) {
+        mainContainer.appendChild(container);
+    }
+
+    container.innerHTML = "";  // Clear existing content
+
+    items.forEach(item => { // Loop through the items and create a card for each item
         const card = createItemCard(item);
         container.appendChild(card);
     });
 };
 
-const createSearchElements = () => { //function to create the search elements and search functionality - will change to dual search functionality later
-    const searchContainer = document.createElement("div");
-    searchContainer.className = "search-container";
+const createItemCard = (item) => { // function to create the item cards, now creates an array for the elements and appends them to the card
+    const isFavorited = JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id); // localStorage to check if the item is favorited
+    const card = createElement("div", { className: "item-card" });
+    console.log("Creating card for item:", item);
 
-    const searchInput = document.createElement("input");
-    searchInput.id = "searchInput";
-    searchInput.placeholder = "Search Shows";
-    searchInput.className = "search-input";
+    const elements = [
+        createElement("img", {
+            src: item.image?.medium || "./media/no-img.png", // OR operator to display the no-img.png if there's no image
+            alt: item.name || item.title || "Image",
+            className: "item-image"
+        }),
+        createElement("div", { className: "title-container" }, {}, [
+            createElement("p", { 
+                textContent: item.name || item.title, // OR operator to work with both shows and people
+                className: "item-title"
+            })
+        ]),
+        createElement("i", {
+            className: `fa-star favorite-icon ${isFavorited ? "fas" : "far"}`, // Assigns 'fas' or 'far' class based on whether the item is favorited, combined with common 'fa-star' and 'favorite-icon' classes.
+            onclick: (e) => { e.stopPropagation(); toggleFavorite(item, e.target);} // Stops propagation and toggles favorite status for the item.
+        }),
+        item.rating && createElement("p", {
+            textContent: item.rating?.average !== null ? `Rating: ${item.rating.average}` : 'Not rated', // Sets text to item's rating if available
+            className: "item-rating"
+        })
+    ];
 
-    const searchButton = document.createElement("button");
-    searchButton.textContent = "Search";
-    searchButton.className = "search-button";
-    searchButton.addEventListener("click", () => performSearch(searchInput.value)); // will include enter key functionality later
+    elements.forEach(element => element && card.appendChild(element));
+    card.addEventListener("click", () => displayShowDetails(item));
+    return card;
+};
+
+const createSearchElements = () => {
+    const navbar = document.querySelector(".nav-container");
+    const insertBeforeElement = navbar.querySelector(".user-container");
+
+    const searchContainer = createElement("div", { className: "search-container" });
+    const searchInput = createElement("input", {
+        id: "searchInput",
+        placeholder: "  Search...",
+        className: "search-input"
+    });
+    const searchButton = createElement("button", {
+        className: "search-button",
+        textContent: "Search",
+        onclick: () => performSearch(searchInput.value)
+    });
 
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(searchButton);
-    document.body.appendChild(searchContainer); // appending everything
+    navbar.insertBefore(searchContainer, insertBeforeElement);
+};
+
+const displayShowDetails = (item) => { // functon to display the show details, now creates an array for the elements and appends them to the container
+    const container = document.getElementById("items-container");
+    container.innerHTML = '';
+    container.classList.add('details-view');
+
+    [
+        createElement("img", {
+            src: item.image?.original || "./media/no-img.png", // OR operator to display the no-img.png if there's no image
+            alt: `Image of ${item.name}`,
+            className: 'details-image'
+        }),
+        createElement("h2", {
+            textContent: item.name,
+            className: 'details-title'
+        }),
+        item.summary && createElement("p", { // AND operator to check if the summary exists
+            innerHTML: item.summary,
+            className: 'details-summary'
+        }),
+        item.rating?.average && createElement("p", { // AND operator to check if the rating exists
+            textContent: `Rating: ${item.rating.average}`,
+            className: 'details-rating'
+        }),
+        item.url && createElement("p", { // AND operator to check if the url exists
+            innerHTML: `Under Construction! <span><a href="${item.url}" target="_blank">Click here to view ${item.name} on TVMaze for now!</a></span>`,
+            className: "details-tvmaze-link"
+        })
+    ].forEach(element => element && container.appendChild(element));
+
+    window.history.pushState({ show: item }, item.name, `#${item.id}`);
+};
+
+
+const createPages = (url) => { //function to create the pages and pagination with buttons
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            displayPageItems();
+        }
+    });
+    document.getElementById('next-btn').addEventListener('click', () => {
+        currentPage++;
+        displayPageItems();
+        if (currentPage * itemsPerPage >= totalArray.length && currentPage >= totalPages - 1) {
+            getItems(url, apiPage);
+        }
+    });
+    getItems(url, apiPage); //initial call to getItems
+};
+
+const getItems = async (url, page) => {
+    const response = await fetch(`${url}?page=${page}`); // unfortunately the API doesnt support embedding on the index endpoint - sad
+    const data = await response.json();
+    console.log(data);
+    if (data.length === 0) { 
+        return; 
+    }
+    totalArray.push(...data); // Append new data to the total array
+    totalPages = Math.ceil(totalArray.length / itemsPerPage);
+    displayPageItems();
+    apiPage++; // increment by 1
+};
+
+const displayPageItems = () => { //function to display the items on the page
+    const startIndex = currentPage * itemsPerPage;
+    const itemsToDisplay = totalArray.slice(startIndex, startIndex + itemsPerPage);
+    displayItems(itemsToDisplay);
 };
 
 const performSearch = async (query) => { //takes in the query from the search input 
-    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`); //using the query to search the API search endpoint
+    const response = await fetch(`https://api.tvmaze.com/search/shows?q=${query}&embed=cast`); //using the query to search the API search endpoint
     const searchResults = await response.json();
     console.log(searchResults); //
     displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
     window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
-};
-
-const createItemCard = (item) => { //function to create a card that will display the item and the necessary data elements
-    const card = document.createElement("div");
-    card.className = "item-card";
-
-    const image = document.createElement("img");
-    image.src = item.image ? item.image.medium : "placeholder.jpg";
-    image.alt = item.name || item.title || "Image";
-    image.className = "item-image";
-    card.appendChild(image);
-
-    const titleContainer = document.createElement("div"); // decided to create a separate container for css reasons
-    titleContainer.className = "title-container";
-    card.appendChild(titleContainer); // append the title container to the main
-
-    if (item.name || item.title) { //resusability between shows/people/movies
-        const title = document.createElement("h4");
-        title.textContent = item.name || item.title;
-        title.className = "item-title";
-        titleContainer.appendChild(title);
-    }
-
-    const favoriteIcon = document.createElement("i");
-    favoriteIcon.className = `fa-star favorite-icon ${JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id) ? "fas" : "far"}`;
-    favoriteIcon.onclick = (e) => {
-        e.stopPropagation();
-        toggleFavorite(item, favoriteIcon);
-    };
-    titleContainer.appendChild(favoriteIcon);
-
-    if (item.rating && item.rating.average) { // Create a rating element if the item has a rating
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        rating.className = "item-rating";
-        card.appendChild(rating);
-    }
-
-    card.addEventListener("click", () => displayShowDetails(item)); // Add click event listener to show information when clicked
-    return card;
-};
-
-const displayShowDetails = (item) => { // Function to display the show details when clicked, using browser history API to update the URL
-    const container = document.getElementById("items-container");
-    container.innerHTML = ''; // Clear existing content
-
-    const title = document.createElement("h2"); // very basic for now, will add more details later and classes for css
-    title.textContent = item.name;
-    container.appendChild(title);
-
-    if (item.summary) {
-        const summary = document.createElement("p");
-        summary.innerHTML = item.summary;
-        container.appendChild(summary);
-    }
-
-    if (item.rating && item.rating.average) {
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${item.rating.average}`;
-        container.appendChild(rating);
-    }
     
-    window.history.pushState({ show: item }, item.name, `#${item.id}`); //update the URL and history state
+    const welcomeElement = document.querySelector(".welcome");
+    if (welcomeElement) {
+        welcomeElement.textContent = "Search Results";
+    }
 };
 
 const toggleFavorite = (item, iconElement) => {
@@ -147,4 +206,6 @@ const getTopRatedShows = async () => { // Function to get the top rated shows di
     displayItems(topRatedShows);
 };
 
-export { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites };
+// Page loading logic //
+
+export { getItems, currentPage, createPages, createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites, createElement };
