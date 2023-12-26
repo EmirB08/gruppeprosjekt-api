@@ -208,4 +208,4 @@ const getTopRatedShows = async () => { // Function to get the top rated shows di
 
 // Page loading logic //
 
-export { getItems, currentPage, createPages, createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites, };
+export { getItems, currentPage, createPages, createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites, createElement };

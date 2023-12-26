@@ -1,6 +1,27 @@
-import { getItems, displayItems, createPages, createSearchElements, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
+import { getItems, displayItems, createPages, createElement, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
 
 const peopleAPI = 'https://api.tvmaze.com/people';
+
+const createSearchElements = () => {
+  const navbar = document.querySelector(".nav-container");
+  const insertBeforeElement = navbar.querySelector(".user-container");
+
+  const searchContainer = createElement("div", { className: "search-container" });
+  const searchInput = createElement("input", {
+      id: "searchInput",
+      placeholder: "  Search...",
+      className: "search-input"
+  });
+  const searchButton = createElement("button", {
+      className: "search-button",
+      textContent: "Search",
+      onclick: () => performSearch(searchInput.value)
+  });
+
+  searchContainer.appendChild(searchInput);
+  searchContainer.appendChild(searchButton);
+  navbar.insertBefore(searchContainer, insertBeforeElement);
+};
 
 const performSearch = async (query) => { //takes in the query from the search input 
   const response = await fetch(`https://api.tvmaze.com/search/people?q=${query}`); //using the query to search the API search endpoint
