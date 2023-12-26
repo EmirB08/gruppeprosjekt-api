@@ -166,6 +166,11 @@ const performSearch = async (query) => { //takes in the query from the search in
     console.log(searchResults); //
     displayItems(searchResults.map(result => result.show)); //array map the search result, very similar to the displayItems function here
     window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
+    
+    const welcomeElement = document.querySelector(".welcome");
+    if (welcomeElement) {
+        welcomeElement.textContent = "Search Results";
+    }
 };
 
 const toggleFavorite = (item, iconElement) => {
