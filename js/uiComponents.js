@@ -45,7 +45,7 @@ const createItemCard = (item) => {
 
     const elements = [
         createElement("img", {
-            src: item.image?.medium || "placeholder.jpg",
+            src: item.image?.medium || "./media/no-img.png",
             alt: item.name || item.title || "Image",
             className: "item-image"
         }),
@@ -97,8 +97,8 @@ const displayShowDetails = (item) => { // functon to display the show details, n
     container.classList.add('details-view');
 
     [
-        item.image && item.image.original && createElement("img", {
-            src: item.image.original,
+        createElement("img", {
+            src: item.image?.original || "./media/no-img.png",
             alt: `Image of ${item.name}`,
             className: 'details-image'
         }),
