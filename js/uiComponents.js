@@ -1,10 +1,10 @@
-let currentPage = 0; //initial state parameters for the page
+let currentPage = 0; // initial global state parameters for the pages
 const itemsPerPage = 12;
 let totalPages = 0;
 let apiPage = 0;
 const totalArray = [];
 
-const createElement = (tagName, attributes = {}, listeners = {}, children = []) => {
+const createElement = (tagName, attributes = {}, listeners = {}, children = []) => { // Creates a DOM element with specified parameters - reusable function
     const element = document.createElement(tagName);
     Object.entries(attributes).forEach(([attr, value]) => element[attr] = value);
     Object.entries(listeners).forEach(([event, handler]) => element.addEventListener(event, handler));
@@ -12,55 +12,55 @@ const createElement = (tagName, attributes = {}, listeners = {}, children = []) 
     return element;
 };
 
-const createContainer = (id) => { // utility function to create a container with the given id, will probably be refactored away and merged if there isn't a need for it
+const createContainer = (id) => { // creates a DOM container with specified id only - reusable function
     const container = document.createElement("div");
     container.id = id;
     document.body.appendChild(container);
     return container;
 };
 
-const displayItems = (items) => {
+const displayItems = (items) => { // function to display the items on the page
     let container = document.getElementById("items-container");
     if (!container) {
         container = createContainer("items-container");
     }
 
-    const mainContainer = document.querySelector(".main-container");
+    const mainContainer = document.querySelector(".main-container"); // retrofitted to work with the new HTML structure that was fixed
     if (!mainContainer.contains(container)) {
         mainContainer.appendChild(container);
     }
 
     container.innerHTML = "";  // Clear existing content
 
-    items.forEach(item => {
+    items.forEach(item => { // Loop through the items and create a card for each item
         const card = createItemCard(item);
         container.appendChild(card);
     });
 };
 
-const createItemCard = (item) => {
-    const isFavorited = JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id);
+const createItemCard = (item) => { // function to create the item cards, now creates an array for the elements and appends them to the card
+    const isFavorited = JSON.parse(localStorage.getItem('favorites') || '[]').includes(item.id); // localStorage to check if the item is favorited
     const card = createElement("div", { className: "item-card" });
     console.log("Creating card for item:", item);
 
     const elements = [
         createElement("img", {
-            src: item.image?.medium || "./media/no-img.png",
+            src: item.image?.medium || "./media/no-img.png", // OR operator to display the no-img.png if there's no image
             alt: item.name || item.title || "Image",
             className: "item-image"
         }),
         createElement("div", { className: "title-container" }, {}, [
             createElement("p", { 
-                textContent: item.name || item.title,
+                textContent: item.name || item.title, // OR operator to work with both shows and people
                 className: "item-title"
             })
         ]),
         createElement("i", {
-            className: `fa-star favorite-icon ${isFavorited ? "fas" : "far"}`,
-            onclick: (e) => { e.stopPropagation(); toggleFavorite(item, e.target); }
+            className: `fa-star favorite-icon ${isFavorited ? "fas" : "far"}`, // Assigns 'fas' or 'far' class based on whether the item is favorited, combined with common 'fa-star' and 'favorite-icon' classes.
+            onclick: (e) => { e.stopPropagation(); toggleFavorite(item, e.target);} // Stops propagation and toggles favorite status for the item.
         }),
         item.rating && createElement("p", {
-            textContent: item.rating?.average !== null ? `Rating: ${item.rating.average}` : 'Not rated',
+            textContent: item.rating?.average !== null ? `Rating: ${item.rating.average}` : 'Not rated', // Sets text to item's rating if available
             className: "item-rating"
         })
     ];
@@ -91,14 +91,14 @@ const createSearchElements = () => {
     navbar.insertBefore(searchContainer, insertBeforeElement);
 };
 
-const displayShowDetails = (item) => { // functon to display the show details, now creates an array for the elements and appends them to the container to reduce code instead of appending each element individually
+const displayShowDetails = (item) => { // functon to display the show details, now creates an array for the elements and appends them to the container
     const container = document.getElementById("items-container");
     container.innerHTML = '';
     container.classList.add('details-view');
 
     [
         createElement("img", {
-            src: item.image?.original || "./media/no-img.png",
+            src: item.image?.original || "./media/no-img.png", // OR operator to display the no-img.png if there's no image
             alt: `Image of ${item.name}`,
             className: 'details-image'
         }),
@@ -106,15 +106,15 @@ const displayShowDetails = (item) => { // functon to display the show details, n
             textContent: item.name,
             className: 'details-title'
         }),
-        item.summary && createElement("p", {
+        item.summary && createElement("p", { // AND operator to check if the summary exists
             innerHTML: item.summary,
             className: 'details-summary'
         }),
-        item.rating?.average && createElement("p", {
+        item.rating?.average && createElement("p", { // AND operator to check if the rating exists
             textContent: `Rating: ${item.rating.average}`,
             className: 'details-rating'
         }),
-        item.url && createElement("p", {
+        item.url && createElement("p", { // AND operator to check if the url exists
             innerHTML: `Under Construction! <span><a href="${item.url}" target="_blank">Click here to view ${item.name} on TVMaze for now!</a></span>`,
             className: "details-tvmaze-link"
         })
