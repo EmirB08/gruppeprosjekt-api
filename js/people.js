@@ -3,7 +3,7 @@ from './uiComponents.js';
 
 const peopleAPI = 'https://api.tvmaze.com/people';
 
-const createSearchElements = () => {
+const createSearchElements = () => { // for some reason adding performSearch alone isn't enough, needed to add the createSearchElements aswell for some reason
   const navbar = document.querySelector(".nav-container");
   const insertBeforeElement = navbar.querySelector(".user-container");
 
