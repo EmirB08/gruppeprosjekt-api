@@ -10,7 +10,7 @@ window.onpopstate = (event) => { // using the history API to update the URL and 
       const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
       container.classList.remove('details-view');
       container.innerHTML = '';
-      createPages(showsAPI); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
+      createPages(showsAPI); // this is the "default", needs to be changed on the other pages to correspond to the "default" page
   }
 };
 
