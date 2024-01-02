@@ -1,4 +1,5 @@
-import { getItems, displayItems, createPages, createElement, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
+import { getItems, displayItems, createPages, createElement, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } 
+from './uiComponents.js';
 
 const peopleAPI = 'https://api.tvmaze.com/people';
 
@@ -10,7 +11,12 @@ const createSearchElements = () => {
   const searchInput = createElement("input", {
       id: "searchInput",
       placeholder: "  Search...",
-      className: "search-input"
+      className: "search-input",
+      onkeydown: (event) => {
+          if (event.key === 'Enter') {
+              performSearch(searchInput.value);
+          }
+      }
   });
   const searchButton = createElement("button", {
       className: "search-button",
@@ -31,14 +37,14 @@ const performSearch = async (query) => { //takes in the query from the search in
   window.history.pushState({ searchQuery: query }, '', `?search=${encodeURIComponent(query)}`); //update the URL and history state - very neat
 };
 
-window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
-  if (event.state && event.state.content) { // If there's a show in the history state, display it
+window.onpopstate = (event) => { // using the history API to update the URL and history state
+  if (event.state && event.state.content) { // If there is content in the history state, display it
           displayShowDetails(event.state.content);
   } else {
-      const container = document.getElementById("items-container"); //clear the cointainer and 
+      const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
       container.classList.remove('details-view');
       container.innerHTML = '';
-      createPages(peopleAPI); //only need to change this to the "default" page of shows.js - will fix later for search query logic so that it doesn't display the default page when there's a search in "queue"
+      createPages(peopleAPI); // this is the "default", needs to be changed on the other pages to correspond to the "default" page
   }
 };
 

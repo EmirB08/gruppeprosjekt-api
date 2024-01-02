@@ -78,7 +78,12 @@ const createSearchElements = () => {
     const searchInput = createElement("input", {
         id: "searchInput",
         placeholder: "  Search...",
-        className: "search-input"
+        className: "search-input",
+        onkeydown: (event) => { //added keydown event listener to the search input
+            if (event.key === 'Enter') {
+                performSearch(searchInput.value);
+            }
+        }
     });
     const searchButton = createElement("button", {
         className: "search-button",
@@ -196,16 +201,5 @@ const manageFavorites = (showId) => { //function to manage favorites, will be re
     localStorage.setItem('favorites', JSON.stringify(favorites)); // stringify and set the favorites array in local storage
     return favorites.includes(showId);
 };
-
-const getTopRatedShows = async () => { // Function to get the top rated shows displayed on the home page
-    const response = await fetch("https://api.tvmaze.com/shows");
-    const shows = await response.json();
-    
-    const topRatedShows = shows.sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0)).slice(0, 12); // Sort and slice to get top 16 shows based on rating
-
-    displayItems(topRatedShows);
-};
-
-// Page loading logic //
 
 export { getItems, currentPage, createPages, createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites, createElement };

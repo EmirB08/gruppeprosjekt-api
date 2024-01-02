@@ -3,8 +3,8 @@ import { getItems, displayItems, createPages, createSearchElements, performSearc
 const showsAPI = 'https://api.tvmaze.com/shows';
 console.log(showsAPI);
 
-window.onpopstate = (event) => { // IMPORTANT: NEEDS TO BE EDITED DEPENDING ON THE HTML - FOR FUTURE REFERENCE
-  if (event.state && event.state.content) { // If there's a show in the history state, display it
+window.onpopstate = (event) => { // using the history API to update the URL and history state
+  if (event.state && event.state.content) { // If there's content in the history state, display it
           displayShowDetails(event.state.content);
   } else {
       const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"

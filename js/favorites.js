@@ -1,13 +1,14 @@
-import { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from "./uiComponents.js";
+import { createContainer, displayItems, createSearchElements, performSearch, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } 
+from "./uiComponents.js";
 
-window.onpopstate = (event) => {
-    if (event.state && event.state.content) { // If there's a show in the history state, display it
+window.onpopstate = (event) => { // using the history API to update the URL and history state
+    if (event.state && event.state.content) { // If there is content in the history state, display it
             displayShowDetails(event.state.show);
     } else {
-        const container = document.getElementById("items-container");
+        const container = document.getElementById("items-container"); //clear the cointainer and display the "default page"
         container.classList.remove('details-view');
         container.innerHTML = '';
-        displayFavorites(); // display the "home page" if there's no show in the history state
+        displayFavorites(); // this is the "default", needs to be changed on the other pages to correspond to the "default" page
     }
 };
 
