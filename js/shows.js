@@ -1,4 +1,5 @@
-import { getItems, displayItems, createPages, createSearchElements, performSearch, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } from './uiComponents.js';
+import { getItems, displayItems, createPages, createSearchElements, performSearch, createContainer, createItemCard, displayShowDetails, toggleFavorite, manageFavorites } 
+from './uiComponents.js';
 
 const showsAPI = 'https://api.tvmaze.com/shows';
 console.log(showsAPI);
