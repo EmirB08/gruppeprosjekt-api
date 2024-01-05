@@ -9,7 +9,7 @@ const fetchAndDisplayShows = async (showIds) => {
 
   const topRatedShows = shows
     .sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0))
-    .slice(0, 12); // Sort and slice to get top 12 based on rating shows
+    .slice(0, 20); // Sort and slice to get top 12 based on rating shows
 
   displayItems(topRatedShows);
 };

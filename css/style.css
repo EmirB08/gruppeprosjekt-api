@@ -105,7 +105,6 @@ a, .search-button {
 }
 
 .item-card {
-  display: block;
   width: 175px;
   min-height: 220px;
   position: relative;

@@ -1,5 +1,5 @@
 let currentPage = 0; // initial global state parameters for the pages
-const itemsPerPage = 12;
+const itemsPerPage = 20;
 let totalPages = 0;
 let apiPage = 0;
 const totalArray = [];
